@@ -1,0 +1,206 @@
+//===========================================================================
+NAME          = "Run a Python script v1.1"
+#include <version.gxh>
+DESCRIPTION   = "
+
+   Run a Python script.  The script is run from a Python shell, and control 
+   is returned to Oasis montaj on completion of the script.
+   
+   Oasis montaj state properties
+   
+   PYTHON.SCRIPT	script (.py) to run
+
+"
+
+// Revision History:
+// v1.1:	2016-2-5 INM - 	changed -p to -om_state to minimize parameter conflict
+//							added debugging option, command-line parameters, 
+//							and quotes around script path to support spaces in names
+// v1.0:	2015-1-5 INM -  first edition
+
+//===========================================================================
+//                                 RESOURCES
+//===========================================================================
+
+RESOURCE = "python.gr"
+#include "python.grh"
+
+//===========================================================================
+//                                  INCLUDE
+//===========================================================================
+
+#include <all.gxh>     // system
+
+//===========================================================================
+//                             GLOBAL VARIABLES
+//===========================================================================
+
+DGW         hDGW; 
+EDB         EData;
+EMAP		EMap;
+WA			fP;
+LST         hLST;
+int 		iShow, iDebug;
+
+string(STR_DB_SYMBOL) sChan,sLine;
+string(STR_DEFAULT) sFidrange;
+string(STR_FILE) sPython,sScript,sPname,sDbName,sMapName,sDir;
+string(STR_DEFAULT_LONG) sCL,sN,sParms;
+int i,n;
+real rX,rY;
+
+#define PROP(A,B) Puts_WA(fP,A); Puts_WA(fP,B); NewLine_WA(fP);
+
+#define LIST(A) { for (i=0; i<n; i++) {GetItem_LST(hLST,LST_ITEM_NAME,i,sN); Puts_WA(fP,A); Puts_WA(fP,"- "); Puts_WA(fP,sN); NewLine_WA(fP); }}
+	
+//===========================================================================
+//                              CODE
+//===========================================================================
+
+{
+
+	// --- default Geosoft PYTHON interpreter ---
+
+	GetString_SYS("PYTHON","EXE",sPython);
+	if (iStrlen_STR(sPython) == 0) {
+		if (iExistEnv_SYS("GXPYTHONEXE")) {
+			GetEnv_SYS("GXPYTHONEXE",sPython);
+			SetString_SYS("PYTHON","EXE",sPython);
+		}
+	}
+
+	if (iInteractive_SYS()) {
+
+		hDGW = Create_DGW("PYTHON");
+
+		SetInfoSYS_DGW(hDGW,_PYTHON_0,DGW_FILEPATH,"PYTHON","SCRIPT");     
+		SetInfoSYS_DGW(hDGW,_PYTHON_1,DGW_FILEPATH,"PYTHON","EXE");
+		SetInfoSYS_DGW(hDGW,_PYTHON_2,DGW_TEXT,"PYTHON","PARAMETERS");
+		SetInfoSYS_DGW(hDGW,_PYTHON_3,DGW_LISTALIAS,"PYTHON","SHOW");
+		SetInfoSYS_DGW(hDGW,_PYTHON_4,DGW_LISTALIAS,"PYTHON","DEBUG");
+		
+		if (iRunDialogue_DGW(hDGW) != 0) Cancel_SYS();
+		
+		GetInfoSYS_DGW(hDGW,_PYTHON_0,DGW_FILEPATH,"PYTHON","SCRIPT");
+		GetInfoSYS_DGW(hDGW,_PYTHON_1,DGW_FILEPATH,"PYTHON","EXE");     
+		GetInfoSYS_DGW(hDGW,_PYTHON_2,DGW_TEXT,"PYTHON","PARAMETERS");
+		GetInfoSYS_DGW(hDGW,_PYTHON_3,DGW_LISTALIAS,"PYTHON","SHOW");
+		GetInfoSYS_DGW(hDGW,_PYTHON_4,DGW_LISTALIAS,"PYTHON","DEBUG");
+		Destroy_DGW(hDGW);
+		
+	}
+
+	GetString_SYS("PYTHON","SCRIPT",sScript);
+	GetString_SYS("PYTHON","EXE",sPython);
+	GetString_SYS("PYTHON","PARAMETERS",sParms);
+	iShow = iGetInt_SYS("PYTHON","SHOW");
+	iDebug = iGetInt_SYS("PYTHON","DEBUG");
+
+
+	// --- create properties file for the script ---
+	GetPath_SYS(SYS_PATH_GEOTEMP,sPname);
+	Strcpy_STR(sPname,sScript);
+	Strcat_STR(sPname,".om_state");
+	GetPath_SYS(SYS_PATH_GEOTEMP,sDir);
+	TransferPath_SYS(sDir,sPname);
+	fP = CreateEx_WA(sPname,WA_NEW,WA_ENCODE_UTF8);
+
+	// --- write out properties in YAML form ---
+
+	hLST = Create_LST(128);
+
+	n = iGetDatabasesLST_EDB(hLST,EDB_PATH_FULL);
+	PROP("db_list: ","")
+	LIST("")
+
+	Strcpy_STR(sDbName,"");
+	if (iHaveCurrent_EDB()) {
+
+		EData = Current_EDB();
+		GetName_EDB(EData,sDbName);
+		PROP("db_current:","")
+		PROP("  name: ",sDbName)
+
+		n = iDispChanLST_EDB(EData,hLST);
+		if (n) {
+			PROP("  displayed_channels: ","")
+			LIST("  ")
+		}
+
+		GetCurrentSelection_EDB(EData,sDbName,sChan,sLine,sFidrange);
+		if (iStrlen_STR(sChan)) {
+			
+			PROP("  selection: ","")
+			PROP("    channels: ",sChan)
+			PROP("    sLines: ",sLine)
+			PROP("    sFidRange: ",sFidrange)
+		}
+		
+		Destroy_EDB(EData);
+	}
+
+	Strcpy_STR(sMapName,"");
+	if (iHaveCurrent_EMAP()) {
+		EMap = Current_EMAP();
+		if (!iIs3DView_EMAP(EMap)) {
+			GetName_EMAP(EMap,sMapName);
+			PROP("map_current:","")
+			PROP("  name: ",sMapName)
+			
+			PROP("  select_point:","")
+			GetCurPoint_EMAP(EMap,rX,rY);
+			FormatR_STR(rX,sN,16,12);
+			PROP("    x: ",sN)
+			FormatR_STR(rY,sN,16,12);
+			PROP("    y: ",sN)
+			
+			PROP("  cursor_point:","")
+			GetCursor_EMAP(EMap,rX,rY);
+			FormatR_STR(rX,sN,16,12);
+			PROP("    x: ",sN)
+			FormatR_STR(rY,sN,16,12);
+			PROP("    y: ",sN)
+		}
+		Destroy_EMAP(EMap);
+	}
+
+	Destroy_WA(fP);
+
+	// --- unload current database and map ---
+
+	if (iStrlen_STR(sDbName) != 0) UnLoad_EDB(sDbName);
+	if (iStrlen_STR(sMapName) != 0) UnLoad_EMAP(sMapName);
+
+	// --- python command line ---
+
+	if (iShow)
+	  Strcpy_STR(sCL,"/K "); 
+	else
+	  Strcpy_STR(sCL,"/C "); 
+	Strcat_STR(sCL,sPython); 
+	Strcat_STR(sCL," \""); 
+	Strcat_STR(sCL,sScript); 
+	Strcat_STR(sCL,"\" -om_state \"");
+	Strcat_STR(sCL,sPname);
+	Strcat_STR(sCL,"\" ");
+	Strcat_STR(sCL,sParms);
+
+	if (iDebug)
+		DisplayMessage_SYS("Command line",sCL);
+	
+	i = iRun_SYS("cmd.exe",sCL,
+			   SYS_RUN_TYPE_WINDOWS +
+			   SYS_RUN_HOLD_ONERROR +
+			   SYS_RUN_WIN_WAIT);
+				
+	if (i == -1) 
+		DisplayMessage_SYS("Script failed",sCL);
+		
+	// --- reload ---
+
+	if (iStrlen_STR(sMapName)) Load_EMAP(sMapName);
+	if (iStrlen_STR(sDbName)) Load_EDB(sDbName);
+    
+	if (!iDebug)
+		iDeleteFile_SYS(sPname);
+}

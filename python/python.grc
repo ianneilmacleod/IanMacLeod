@@ -1,0 +1,23 @@
+//
+//-----------------------------------------------------------------------------
+
+RESOURCE,FORM,PYTHON,"Run a Python script",-1
+FEDIT,,,64,"Python script (.py)",,OLD,,,*.py
+FEDIT,,,64,"Python interpreter (.exe)",,OLD,,,*.exe
+FEDIT,,,64,"Command line parameters:"
+LEDIT,,,16,"Show or close command window after running?",R,FORCE,Show,ShowClose
+LEDIT,,,16,"Debug?",R,FORCE,No,YesNo
+
+EBUT,OK,0
+EBUT,Cancel,1,cancel
+HBUT,&Help,help
+
+RESOURCE, LIST, ShowClose
+ITEM,"Close",0
+ITEM,"Show",1
+
+RESOURCE, LIST, YesNo
+ITEM,"No",0
+ITEM,"Yes",1
+
+RESOURCE,HELP,help,python.rtf

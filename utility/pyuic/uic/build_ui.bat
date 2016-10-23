@@ -1,0 +1,1 @@
+c:\Anaconda3\python.exe C:\Anaconda3\Lib\site-packages\PyQt5\uic\pyuic.py ui_som_om.ui -o ui_som_om.py
