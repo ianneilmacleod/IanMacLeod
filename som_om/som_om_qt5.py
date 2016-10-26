@@ -10,8 +10,8 @@ Created on Sun Jan  5 10:15:34 2014
 #TODO: graphics - show the som adjusting as it goes.
 
 # comment-out following 2 lines to support remote debugging
-import pydevd
-pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
+#import pydevd
+#pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
 import os,sys
 import math
@@ -19,14 +19,14 @@ import yaml
 import numpy as np
 import argparse as argp
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 import geosoft.gxpy.gx as gxp
 import geosoft.gxpy.gdb as gxgdb
 
 app_folder = os.path.split(__file__)[0]
 sys.path.insert(0, app_folder)
-import ui_som_om4 as ui
+import ui_som_om5 as ui
 
 modules_folder = os.path.split(os.path.split(__file__)[0])[0]
 sys.path.insert(0, modules_folder)
@@ -47,7 +47,7 @@ class SOMException(Exception):
 
 ###############################################################################################
 
-class SomDialog(QtGui.QDialog, ui.Ui_som_om):
+class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
 
     def __init__(self, gdb, out_fields=('',''), filter=('','')):
         super(SomDialog, self).__init__(None)
@@ -225,10 +225,10 @@ class SomDialog(QtGui.QDialog, ui.Ui_som_om):
         def progress(label, value=None, som=None):
             self.progLabel.setText(label)
             if value != None: self.progressBar.setValue(int(value))
-            QtGui.qApp.processEvents()
+            QtWidgets.qApp.processEvents()
 
         def stop_check():
-            QtGui.qApp.processEvents()
+            QtWidgets.qApp.processEvents()
             return self.stopRequest
 
         def addChan(cb,cn,c,n):
@@ -268,12 +268,12 @@ class SomDialog(QtGui.QDialog, ui.Ui_som_om):
         self.out_fields = (self.outClass.text(), self.outError.text())
         gdbChans = self.gdb.channels()
         if (self.out_fields[0] in gdbChans) or (self.out_fields[1] in gdbChans):
-            butts = QtGui.QMessageBox.Yes
-            butts |= QtGui.QMessageBox.No
-            response = QtGui.QMessageBox.question(self,"Field exist in database",\
+            butts = QtWidgets.QMessageBox.Yes
+            butts |= QtWidgets.QMessageBox.No
+            response = QtWidgets.QMessageBox.question(self,"Field exist in database",\
                                                   '"{}" or "{}" exists. Overwrite?'.format(self.out_fields[0],self.out_fields[1]),\
                                                   buttons=butts)
-            if response != QtGui.QMessageBox.Yes:
+            if response != QtWidgets.QMessageBox.Yes:
                 return
 
         self.stopB(True)
@@ -283,16 +283,16 @@ class SomDialog(QtGui.QDialog, ui.Ui_som_om):
                          similarity=self.similarity_func.currentText(),
                          progress=progress, stop=stop_check, out_fields=self.out_fields)
 
-            butts = QtGui.QMessageBox.Yes
-            butts |= QtGui.QMessageBox.No
-            response = QtGui.QMessageBox.question(self, "Classification complete",
+            butts = QtWidgets.QMessageBox.Yes
+            butts |= QtWidgets.QMessageBox.No
+            response = QtWidgets.QMessageBox.question(self, "Classification complete",
                                                   'Continue classifying?',
                                                   buttons=butts)
-            if response == QtGui.QMessageBox.No:
+            if response == QtWidgets.QMessageBox.No:
                 self.done(0)
 
         except Exception as e:
-            QtGui.QMessageBox.information(self, "Classification failed", '{}'.format(e), buttons=QtGui.QMessageBox.Ok)
+            QtWidgets.QMessageBox.information(self, "Classification failed", '{}'.format(e), buttons=QtWidgets.QMessageBox.Ok)
             raise
 
 
@@ -313,7 +313,7 @@ def process(gdb, in_fields=[], out_fields=['a','b']):
 
     try:
         #launch GUI
-        app = QtGui.QApplication([])
+        app = QtWidgets.QApplication([])
         form = SomDialog(gdb,out_fields)
         form.show()
         app.exec_()
