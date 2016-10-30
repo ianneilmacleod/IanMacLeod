@@ -10,12 +10,12 @@ Created on Sun Jan  5 10:15:34 2014
 #TODO: graphics - show the som adjusting as it goes.
 
 # comment-out following 2 lines to support remote debugging
-#import pydevd
+import pydevd
 #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
 import os,sys
 import math
-import yaml
+import json
 import numpy as np
 import argparse as argp
 
@@ -23,14 +23,21 @@ from PyQt5 import QtGui, QtWidgets
 
 import geosoft.gxpy.gx as gxp
 import geosoft.gxpy.gdb as gxgdb
+import geosoft.gxpy.utility as gxu
 
-app_folder = os.path.split(__file__)[0]
-sys.path.insert(0, app_folder)
-import ui_som_om5 as ui
+try:
+    import ui_som_om5 as ui
+except:
+    app_folder = os.path.split(__file__)[0]
+    sys.path.insert(0, app_folder)
+    import ui_som_om5 as ui
 
-modules_folder = os.path.split(os.path.split(__file__)[0])[0]
-sys.path.insert(0, modules_folder)
-import modules.mvar as mvar
+try:
+    import modules.mvar as mvar
+except:
+    modules_folder = os.path.split(os.path.split(__file__)[0])[0]
+    sys.path.insert(0, modules_folder)
+    import modules.mvar as mvar
 
 def decimate(data,maxn):
     ndata = len(data)
@@ -321,48 +328,29 @@ def process(gdb, in_fields=[], out_fields=['a','b']):
         gxc.enable_application_windows(True)
         raise
 
-def rungx():
-    gdb = gxgdb.GXdb.open()
-    process(gdb)
-
-def main():
+###############################################################################################
+if __name__ == '__main__':
     '''
     Self-Organizing maps as a stand-alone Python program.
-    :return: 0 on normal exit
     '''
 
-    def progress(label, value=None, som=None):
-        if value:
-            print('{} {}%'.format(label, value))
-        else:
-            print(label)
+    #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
     # get command line parameters
     parser = argp.ArgumentParser(description="SOM analysis of data in a Geosoft database")
-    parser.add_argument("-om_state", help="YAML file contains Oasis montaj state")
     args = parser.parse_args()
-    print("GeoSOM copyright 2014 Geosoft Inc.\n")
-
-    if args.om_state == None:
-        state = {}
-    else:
-        with open(args.om_state, 'r') as f:
-            state = yaml.load(f)
-    print(yaml.dump(state))
-
-    currentDB = state.get('db_current', None)
-    if currentDB is None:
-        raise SOMException("Current database not defined.  \"db_current\" not found in properties.")
-    sDbName = currentDB.get('name', None)
-    if sDbName is None:
-        raise SOMException("Database name not defined.  \"db_current/name\" not found in properties.")
+    print("GeoSOM copyright 2016 Geosoft Inc.\n")
 
     gxc = gxp.GXpy()
+    state = gxu.get_shared_dict()
+
+    try:
+        state_gdb = state['gdb']
+        sDbName = state_gdb['current']
+    except:
+        raise SOMException("Database name not defined.  \"gdb/current\" not found in state properties.")
+
     gdb = gxgdb.GXdb.open(sDbName)
     process(gdb)
-    return 0
 
-###############################################################################################
-if __name__ == '__main__':
-    sys.exit(main())
 
