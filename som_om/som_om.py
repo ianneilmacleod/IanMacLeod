@@ -30,10 +30,9 @@ def rungx():
         gxom.message(_('No current database'), _('An open database is required.'))
 
     # settings
-    try:
-        settings = json.loads(gxu.get_parameters('SOM_OM', ('SETTINGS',))['SETTINGS'])
-    except KeyError:
-        settings = {}
+    settings = gxu.get_parameters('SOM_OM')
+
+    # if different database, reset database-dependent settings
     if settings.get('gdb_name', '') != gdb_name:
         settings['gdb_name'] = gdb_name
         settings['input_data'] = sorted(state['disp_chan_list'], key=str.lower)
@@ -42,9 +41,13 @@ def rungx():
     gxapi.GXEDB.un_load(gdb_name)
     try:
         script = os.path.join(os.path.split(__file__)[0], 'som_om_qt5.py')
-        parms = gxu.run_external_python(script, settings)
+        results = gxu.run_external_python(script, settings)
     except:
         gxapi.GXEDB.load(gdb_name)
         raise
+
+    # save results
+    gxu.save_parameters('SOM_OM', results)
+
     gxapi.GXEDB.load(gdb_name)
 
