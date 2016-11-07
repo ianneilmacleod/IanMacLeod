@@ -13,7 +13,8 @@ Created on Sun Jan  5 10:15:34 2014
 import pydevd
 #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
-import os,sys
+import os
+import sys
 import math
 import json
 import numpy as np
@@ -25,19 +26,19 @@ import geosoft.gxpy.gx as gxp
 import geosoft.gxpy.gdb as gxgdb
 import geosoft.gxpy.utility as gxu
 
-try:
-    import ui_som_om5 as ui
-except:
-    app_folder = os.path.split(__file__)[0]
-    sys.path.insert(0, app_folder)
-    import ui_som_om5 as ui
+
+def _(s):
+    return s
+
 
 try:
     import modules.mvar as mvar
 except:
     modules_folder = os.path.split(os.path.split(__file__)[0])[0]
-    sys.path.insert(0, modules_folder)
+    sys.path.append(modules_folder)
     import modules.mvar as mvar
+
+from som_om_ui_qt5 import Ui_som_om
 
 def decimate(data,maxn):
     ndata = len(data)
@@ -54,18 +55,18 @@ class SOMException(Exception):
 
 ###############################################################################################
 
-class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
+class SomDialog(QtWidgets.QDialog, Ui_som_om):
 
-    def __init__(self, gdb, out_fields=('',''), filter=('','')):
+    def __init__(self, gdb, settings):
         super(SomDialog, self).__init__(None)
         self.setupUi(self)
 
         self.gdb = gdb
-        self.out_fields = out_fields
-        self.filter = filter
+        self.class_err = settings['class_err']
+        self.filter = settings['filter']
         self.stopRequest = False
         self.savedVal = {}
-        self.chans = list(self.gdb.channels(chan=gxgdb.CHAN_DISPLAYED))
+        self.chans = sorted(settings['input_data'], key=str.lower)
         self.norms = [0] * len(self.chans)
 
         #connect slots
@@ -103,7 +104,7 @@ class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
         self.filterChan.clear()
 
         #set channel lists to database channels
-        chans = self.gdb.channels()
+        chans = self.gdb.list_channels()
         chans[''] = None
         for c in sorted(chans.keys(), key=lambda k: k.lower()):
             self.chan_1.addItem(c)
@@ -147,15 +148,15 @@ class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
 
 
         #output channels
-        self.outClass.setText(self.out_fields[0])
-        self.outError.setText(self.out_fields[1])
+        self.outClass.setText(self.class_err[0])
+        self.outError.setText(self.class_err[1])
 
         #filter
         self.filterChan.setCurrentIndex(self.filterChan.findText(self.filter[0]))
         self.filterVal.setText(self.filter[1])
 
         #database name
-        self.databaseName.setText(self.gdb.fileName())
+        self.databaseName.setText(self.gdb.file_name())
 
 
     def initialiseDialog(self):
@@ -272,13 +273,13 @@ class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
         if (len(self.filter[0]) == 0) or (len(self.filter[1]) == 0):
             self.filter = ('','')
 
-        self.out_fields = (self.outClass.text(), self.outError.text())
-        gdbChans = self.gdb.channels()
-        if (self.out_fields[0] in gdbChans) or (self.out_fields[1] in gdbChans):
+        self.class_err = (self.outClass.text(), self.outError.text())
+        gdbChans = self.gdb.list_channels()
+        if (self.class_err[0] in gdbChans) or (self.class_err[1] in gdbChans):
             butts = QtWidgets.QMessageBox.Yes
             butts |= QtWidgets.QMessageBox.No
             response = QtWidgets.QMessageBox.question(self,"Field exist in database",\
-                                                  '"{}" or "{}" exists. Overwrite?'.format(self.out_fields[0],self.out_fields[1]),\
+                                                  '"{}" or "{}" exists. Overwrite?'.format(self.class_err[0],self.class_err[1]),\
                                                   buttons=butts)
             if response != QtWidgets.QMessageBox.Yes:
                 return
@@ -288,7 +289,7 @@ class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
             mvar.SOMgdb( self.gdb, chan, dim=cls, per=pct,
                          normalize=norm, ch_filter=self.filter,
                          similarity=self.similarity_func.currentText(),
-                         progress=progress, stop=stop_check, out_fields=self.out_fields)
+                         progress=progress, stop=stop_check, class_err=self.class_err)
 
             butts = QtWidgets.QMessageBox.Yes
             butts |= QtWidgets.QMessageBox.No
@@ -308,49 +309,45 @@ class SomDialog(QtWidgets.QDialog, ui.Ui_som_om):
         self.refresh()
 
         #if new channels in saved unique lists, remove them
-        self.savedVal.pop(self.out_fields[0],None)
-        self.savedVal.pop(self.out_fields[1],None)
+        self.savedVal.pop(self.class_err[0],None)
+        self.savedVal.pop(self.class_err[1],None)
 
         progress('...',0)
-
-def process(gdb, in_fields=[], out_fields=['a','b']):
-
-    gxc = gxp.GXpy().gxapi
-    gxc.enable_application_windows(False)
-
-    try:
-        #launch GUI
-        app = QtWidgets.QApplication([])
-        form = SomDialog(gdb,out_fields)
-        form.show()
-        app.exec_()
-    except:
-        gxc.enable_application_windows(True)
-        raise
 
 ###############################################################################################
 if __name__ == '__main__':
     '''
-    Self-Organizing maps as a stand-alone Python program.
+    Self-Organizing maps
     '''
 
     #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
     # get command line parameters
-    parser = argp.ArgumentParser(description="SOM analysis of data in a Geosoft database")
+    parser = argp.ArgumentParser(description=_("SOM analysis of data in a Geosoft database"))
     args = parser.parse_args()
     print("GeoSOM copyright 2016 Geosoft Inc.\n")
 
     gxc = gxp.GXpy()
-    state = gxu.get_shared_dict()
+    settings = gxu.get_shared_dict()
 
-    try:
-        state_gdb = state['gdb']
-        sDbName = state_gdb['current']
-    except:
-        raise SOMException("Database name not defined.  \"gdb/current\" not found in state properties.")
+    # defaults
+    if 'class_err' not in settings:
+        settings['class_err'] = ('Class', 'EuD')
+    if 'filter' not in settings:
+        settings['filter'] = ''
 
-    gdb = gxgdb.GXdb.open(sDbName)
-    process(gdb)
+    gdb_name = settings['gdb_name']
+    gdb = gxgdb.GXdb.open(gdb_name)
+
+    #launch GUI
+    app = QtWidgets.QApplication([])
+    form = SomDialog(gdb, settings)
+    form.show()
+    app.exec_()
+
+    results = settings
+    gxu.set_shared_dict(results)
+
+    input(_('Press enter to continue...'))
 
 

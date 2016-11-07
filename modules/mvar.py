@@ -495,7 +495,7 @@ class SOMgdb:
                         (dim*dim)
     :param per:         percent cutoff for anomalous classes.  Anomalous classes are determined based on a percentage
                         of the data that least-fits the base neurons.
-    :param out_fields:  names of the output fields for the classification index and the Euler Distance
+    :param class_err:  names of the output fields for the classification index and the Euler Distance
     :param ch_filter:   tuple( filter_channel, filter_value ), filter to only process data that matches filter_value
                         in the filter_channel.  This is to limit analysis to a specific existing classification.
     :param similarity:  a similarity function (classes,vector) that returns index of closest match of
@@ -512,7 +512,7 @@ class SOMgdb:
     """
 
     def __init__(self, gdb, fields, dim=16, per=2.0, normalize=NormType.none,
-                 out_fields=('Class', 'EuD'), ch_filter=('', None), similarity=None,
+                 class_err=('Class', 'EuD'), ch_filter=('', None), similarity=None,
                  progress=print, stop=None):
 
         # read/sample data
@@ -520,8 +520,8 @@ class SOMgdb:
         self.fields = list(fields)
         self.dim = dim
         self.per = per
-        self.outClass = out_fields[0]
-        self.outDist = out_fields[1]
+        self.outClass = class_err[0]
+        self.outDist = class_err[1]
 
         if ch_filter[0]:
             self.ch_filter = (ch_filter[0], gxp.rdecode(ch_filter[1]))
@@ -669,7 +669,7 @@ class SOMgdb:
             ln, lsymb = self.gdb.line_name_symb(l)
 
             data, ch, fid = self.gdb.read_line(l, channels=self.fields)
-            dummy = gxu.gxDummy(data.dtype)
+            dummy = gxu.gx_dummy(data.dtype)
 
             # mask will hold True for data to be removed from output
             mask = np.apply_along_axis(lambda a: dummy in a, 1, data)
@@ -682,8 +682,8 @@ class SOMgdb:
             classes = self.som.som.reshape(-1, data.shape[1])
             clss = classify_data(classes, data, similarity=self._sim)
             err = euclidean_distance(classes[clss], data)
-            clss[mask] = gxu.gxDummy(clss.dtype)
-            err[mask] = gxu.gxDummy(err.dtype)
+            clss[mask] = gxu.gx_dummy(clss.dtype)
+            err[mask] = gxu.gx_dummy(err.dtype)
             self.gdb.write_channel(lsymb, self.outClass, clss)
             self.gdb.write_channel(lsymb, self.outDist, err)
 

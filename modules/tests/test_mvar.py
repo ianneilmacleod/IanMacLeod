@@ -260,7 +260,7 @@ class TestSOM(unittest.TestCase):
                           ['R', 'G', 'B'],
                           dim=9,
                           progress=progress,
-                          out_fields=['cls', 'eud'])
+                          class_err=['cls', 'eud'])
 
     '''
     def test_big_gdb(self):
@@ -276,7 +276,7 @@ class TestSOM(unittest.TestCase):
                           ['b_x', 'b_y', 'b_z'], \
                           dim=4, \
                           progress=progress, \
-                          out_fields=['c_no', 'c_no_eud'])
+                          class_err=['c_no', 'c_no_eud'])
     '''
 
     def test_gdb2(self):
@@ -294,7 +294,7 @@ class TestSOM(unittest.TestCase):
                           ['R', 'G', 'B'], \
                           dim=9, \
                           progress=progress, \
-                          out_fields=['cls', 'eud'])
+                          class_err=['cls', 'eud'])
 
     def test_euclidean(self):
         self.start(gsys.func_name())
