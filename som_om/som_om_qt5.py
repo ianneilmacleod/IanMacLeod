@@ -26,11 +26,6 @@ import geosoft.gxpy.gx as gxp
 import geosoft.gxpy.gdb as gxgdb
 import geosoft.gxpy.utility as gxu
 
-
-def _(s):
-    return s
-
-
 try:
     import modules.mvar as mvar
 except:
@@ -39,6 +34,11 @@ except:
     import modules.mvar as mvar
 
 from som_om_ui_qt5 import Ui_som_om
+
+
+def _(s):
+    return s
+
 
 def decimate(data,maxn):
     ndata = len(data)
@@ -62,12 +62,17 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
         self.setupUi(self)
 
         self.gdb = gdb
-        self.class_err = settings['class_err']
-        self.filter = settings['filter']
+        self.settings = settings
+        self.class_err = settings['CLASS_ERR']
+        self.filter = settings['FILTER']
         self.stopRequest = False
         self.savedVal = {}
-        self.chans = sorted(settings['input_data'], key=str.lower)
-        self.norms = [0] * len(self.chans)
+        indata = settings['INPUT_DATA']
+        self.chans = sorted(indata, key=str.lower)
+        self.norms = [indata[c] for c in self.chans]
+
+        sf = mvar.similarity_functions()
+        self.som_param = settings.get('SOM_PARAMETERS', (4, 2, sf[0]))
 
         #connect slots
         self.classButton.clicked.connect(self.classify)
@@ -125,6 +130,26 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
             self.chan_16.addItem(c)
             self.filterChan.addItem(c)
 
+        # set norm list
+        for n in ['no','normal','lognorm']:
+            self.norm.addItem(n)
+            self.norm_1.addItem(n)
+            self.norm_2.addItem(n)
+            self.norm_3.addItem(n)
+            self.norm_4.addItem(n)
+            self.norm_5.addItem(n)
+            self.norm_6.addItem(n)
+            self.norm_7.addItem(n)
+            self.norm_8.addItem(n)
+            self.norm_9.addItem(n)
+            self.norm_10.addItem(n)
+            self.norm_11.addItem(n)
+            self.norm_12.addItem(n)
+            self.norm_13.addItem(n)
+            self.norm_14.addItem(n)
+            self.norm_15.addItem(n)
+            self.norm_16.addItem(n)
+
         #set default channels
         chans = self.chans
         norms = self.norms
@@ -146,7 +171,6 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
         if n >= 15: channorm(self.chan_15,self.norm_15,chans[14],norms[14])
         if n >= 16: channorm(self.chan_16,self.norm_16,chans[15],norms[15])
 
-
         #output channels
         self.outClass.setText(self.class_err[0])
         self.outError.setText(self.class_err[1])
@@ -158,41 +182,34 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
         #database name
         self.databaseName.setText(self.gdb.file_name())
 
+    def results(self):
+        indata = {}
+        for i in range(len(self.chans)):
+            indata[self.chans[i]] = self.norms[i]
+        self.settings['INPUT_DATA'] = indata
+        self.settings['FILTER'] = self.filter
+        self.settings['CLASS_ERR'] = self.class_err
+        self.settings['SOM_PARAMETERS'] = self.som_param
+        return self.settings
 
     def initialiseDialog(self):
 
         self.refresh()
 
-        for n in ['no','normal','lognorm']:
-            self.norm.addItem(n)
-            self.norm_1.addItem(n)
-            self.norm_2.addItem(n)
-            self.norm_3.addItem(n)
-            self.norm_4.addItem(n)
-            self.norm_5.addItem(n)
-            self.norm_6.addItem(n)
-            self.norm_7.addItem(n)
-            self.norm_8.addItem(n)
-            self.norm_9.addItem(n)
-            self.norm_10.addItem(n)
-            self.norm_11.addItem(n)
-            self.norm_12.addItem(n)
-            self.norm_13.addItem(n)
-            self.norm_14.addItem(n)
-            self.norm_15.addItem(n)
-            self.norm_16.addItem(n)
-
         self.stopB(False)
 
         # similarity
         sf = mvar.similarity_functions()
-        for i in sf: self.similarity_func.addItem(str(i))
-        self.similarity_func.setCurrentIndex(0)
+        for i in sf:
+            self.similarity_func.addItem(str(i))
+        self.similarity_func.setCurrentIndex(sf.index(self.som_param[2]))
 
         # classifications
         lc = mvar.SOM.list_dim()
-        for i in lc: self.nClasses.addItem(str(i))
-        self.anomPercent.setText("2.0")
+        for i in lc:
+            self.nClasses.addItem(str(i))
+        self.nClasses.setCurrentIndex(lc.index(self.som_param[0]))
+        self.anomPercent.setText(str(self.som_param[1]))
 
     def stopB(self,b):
         self.stopButton.setEnabled(b)
@@ -267,52 +284,46 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
         self.chans = chan
         self.norms = norm
 
-        cls = int(self.nClasses.currentText())
-        pct = min(max(0.0,float(self.anomPercent.text())),95.0)
+        self.som_param = (int(self.nClasses.currentText()),
+                          min(max(0.0,float(self.anomPercent.text())),95.0),
+                          self.similarity_func.currentText())
+
         self.filter = (self.filterChan.currentText().strip(), self.filterVal.text().strip())
         if (len(self.filter[0]) == 0) or (len(self.filter[1]) == 0):
             self.filter = ('','')
 
         self.class_err = (self.outClass.text(), self.outError.text())
+
         gdbChans = self.gdb.list_channels()
         if (self.class_err[0] in gdbChans) or (self.class_err[1] in gdbChans):
             butts = QtWidgets.QMessageBox.Yes
             butts |= QtWidgets.QMessageBox.No
-            response = QtWidgets.QMessageBox.question(self,"Field exist in database",\
-                                                  '"{}" or "{}" exists. Overwrite?'.format(self.class_err[0],self.class_err[1]),\
+            response = QtWidgets.QMessageBox.question(self,"Field exist in database",
+                                                  '"{}" or "{}" exists. Overwrite?'
+                                                  .format(self.class_err[0],self.class_err[1]),
                                                   buttons=butts)
             if response != QtWidgets.QMessageBox.Yes:
                 return
 
         self.stopB(True)
         try:
-            mvar.SOMgdb( self.gdb, chan, dim=cls, per=pct,
-                         normalize=norm, ch_filter=self.filter,
-                         similarity=self.similarity_func.currentText(),
+            mvar.SOMgdb( self.gdb,
+                         chan,
+                         normalize=norm,
+                         ch_filter=self.filter,
+                         dim=self.som_param[0],
+                         per=self.som_param[1],
+                         similarity=self.som_param[2],
                          progress=progress, stop=stop_check, class_err=self.class_err)
 
-            butts = QtWidgets.QMessageBox.Yes
-            butts |= QtWidgets.QMessageBox.No
-            response = QtWidgets.QMessageBox.question(self, "Classification complete",
-                                                  'Continue classifying?',
-                                                  buttons=butts)
-            if response == QtWidgets.QMessageBox.No:
-                self.done(0)
-
         except Exception as e:
-            QtWidgets.QMessageBox.information(self, "Classification failed", '{}'.format(e), buttons=QtWidgets.QMessageBox.Ok)
+            QtWidgets.QMessageBox.information(self,
+                                              "Classification failed",
+                                              '{}'.format(e),
+                                              buttons=QtWidgets.QMessageBox.Ok)
             raise
 
-
-        #refresh UI
-        self.stopB(False)
-        self.refresh()
-
-        #if new channels in saved unique lists, remove them
-        self.savedVal.pop(self.class_err[0],None)
-        self.savedVal.pop(self.class_err[1],None)
-
-        progress('...',0)
+        self.done(0)
 
 ###############################################################################################
 if __name__ == '__main__':
@@ -320,23 +331,26 @@ if __name__ == '__main__':
     Self-Organizing maps
     '''
 
-    #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
-
     # get command line parameters
+
     parser = argp.ArgumentParser(description=_("SOM analysis of data in a Geosoft database"))
     args = parser.parse_args()
     print("GeoSOM copyright 2016 Geosoft Inc.\n")
 
     gxc = gxp.GXpy()
     settings = gxu.get_shared_dict()
+    print(settings)
+    #input('continue...')
 
     # defaults
-    if 'class_err' not in settings:
-        settings['class_err'] = ('Class', 'EuD')
-    if 'filter' not in settings:
-        settings['filter'] = ''
+    if 'CLASS_ERR' not in settings:
+        settings['CLASS_ERR'] = ('Class', 'EuD')
+    if 'FILTER' not in settings:
+        settings['FILTER'] = ('', '')
+    if 'SOM_PARAMETERS' not in settings:
+        settings['SOM_PARAMETERS'] = (4, 2, mvar.similarity_functions()[0])
 
-    gdb_name = settings['gdb_name']
+    gdb_name = os.path.normpath(settings['GDB_NAME'])
     gdb = gxgdb.GXdb.open(gdb_name)
 
     #launch GUI
@@ -345,9 +359,5 @@ if __name__ == '__main__':
     form.show()
     app.exec_()
 
-    results = settings
+    results = form.results()
     gxu.set_shared_dict(results)
-
-    input(_('Press enter to continue...'))
-
-
