@@ -1,0 +1,97 @@
+//=============================================================================
+//
+//  MDD.ih
+//
+//=============================================================================
+
+#ifndef _DD_IH_DEFINED
+#define _DD_IH_DEFINED
+
+// --- OBJECT ID ---
+
+#define OBJ_ID 0x2044444d       // was *((long*)"MDD ")
+
+
+// --- LIMITS ---
+
+#define MAX_DD_ATTRIBS   11
+
+
+
+// --- INTERNAL STRUCTURE ---
+
+struct h_dd
+{
+
+	// --- Logical Info ---
+
+	long obj_id;                 // Object id NUMBER
+
+
+	// --- MAP info ---
+
+	H_MAP* hMAP;                 // MAP
+	VOL_STR szName[64];          // default view name
+	VOL_STR szGrp[64];           // group name
+	H_MVIEW* hMVIEW;             // current MVIEW
+	H_AP* hAP;                   // AP
+	H_MP* hMP;                   // MP
+	bool fNewViews;           // true if plot set it's own views.
+
+
+	// --- REG for TrueType font mappings ---
+
+	H_REG* hRegTT;               // TT font map
+	VOL_STR* pcFilt;             // text filter buffer
+	long lFilt;                  // length of filter buffer
+	VOL_STR* pcFiltU;            // text filter buffer
+	long lFiltU;                 // length of filter buffer
+
+
+	GS_D2POINT D2_cur;           // Current Pen Location
+	COL_ANY C_curL;              // Current line colour
+	COL_ANY C_curF;              // Current fill colour
+	COL_ANY C_new;               // New colour
+	double dT_cur;               // Current thickness
+	double dT_new;               // New thickness
+
+
+	// --- scaling to convert microns to view units (dXs*X + dXo) ---
+
+	double dXo, dYo;             // origin
+	double dXs, dYs;             // scaling
+
+};
+
+// --- inline functions ---
+
+GS_INLINE void CHECK_LINE(H_DD* hDD)
+{
+	ASSERT(sizeof (hDD->C_new) == sizeof (long));
+	if (*(long*) &hDD->C_new != *(long*) &hDD->C_curL)
+	{
+		sLineColor_MVIEW(hDD->hMVIEW, hDD->C_new);
+		hDD->C_curL = hDD->C_new;
+	}
+	if (hDD->dT_new != hDD->dT_cur)
+	{
+		sLineThick_MVIEW(hDD->hMVIEW, hDD->dT_new);
+		hDD->dT_cur = hDD->dT_new;
+	}
+}
+
+GS_INLINE void CHECK_FILL(H_DD* hDD)
+{
+	if (*(long*) &hDD->C_new != *(long*) &hDD->C_curF)
+	{
+		sFillColor_MVIEW(hDD->hMVIEW, hDD->C_new);
+		hDD->C_curF = hDD->C_new;
+	}
+}
+
+GS_INLINE void PT_VIEW(H_DD* hDD, const Point_DD* pP, GS_D2POINT* pD)
+{
+	pD->dX = hDD->dXs * (double) (pP->x) + hDD->dXo;
+	pD->dY = hDD->dYs * (double) (pP->y) + hDD->dYo;
+}
+#endif
