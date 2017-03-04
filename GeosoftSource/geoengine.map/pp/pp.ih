@@ -1,0 +1,664 @@
+//=============================================================================
+//
+// PP.ih
+//
+// Geosoft high-level graphics class internal header.
+//
+// This part of the class performs rendering to a device.  The TP member
+// class performs maintenance of tables.
+//
+//=============================================================================
+
+#ifndef _PP_IH_DEFINED
+#define _PP_IH_DEFINED
+
+#include <col.h>                // colours
+#include <pp.h>                 // PP Header
+#include <lpt.h>                // LPT HEader
+#include <pmf.h>                // PMF Internal Header
+#include "../pmf/pmf.ih"
+
+
+
+// --- OBJECT IDENTIFICATION NUMBER ---
+
+#define PMF_PP_ID     0x50502020        // In Hex "PP  "
+#define NO_ERROR  0L
+
+// --- STROKING CONTROL ---
+
+#define TXT_OVER_SCORE       1                  // Overscore
+#define TXT_UNDER_SCORE      2                  // Underscore
+#define STROKE_RES          GFN_RES_DOUBLE      // Stroke Character Resolution
+#define MIN_STROKES         20                  // Need at least 160 bytes on stack
+
+
+// --- LIMITS ---
+
+#define PMF_PP_READ_BUFFER     2024     // 1K Read Buffer for PMF DATA
+#define PMF_PP_WRITE_BUFFER    4096     // 4K Write Buffer for PMF DATA
+
+
+// --- EXTENTS DEFINES ---
+
+#define EXT_ERASED         (((unsigned long) 1) << 31)
+#define EXT_GRAPHIC        (((unsigned long) 1) << 30)
+#define EXT_OLD            (((unsigned long) 1) << 29)
+#define EXT_ATTRIB         (((unsigned long) 1) << 28)
+#define EXT_UPPER          (EXT_ERASED | EXT_GRAPHIC | EXT_OLD | EXT_ATTRIB)
+#define EXT_LOWER          (~(EXT_UPPER))
+
+
+// --- RENDERING CONVERSIONS ---
+
+#define  CONV_DOUBLE    0
+#define  CONV_FLOAT     1
+#define  CONV_SHORT     2
+#define  CONV_NONE      3
+
+#define ATTRIBUTE_SIZE    sizeof(PMF_ATTRIB)
+#define ATTRIBS_IN_BLOCK  7
+
+// --- MATH DEFINES ---
+
+#define DEG_TO_GRAD   (180.0 * M_1_PI)
+#define DEG_TO_GRAD2  (90.0 * M_1_PI)
+#ifndef PI
+#define PI            M_PI
+#endif
+#ifndef PI2
+#define PI2           (2.0 * M_PI)
+#endif
+#define PI5           M_PI_2
+#define MIN_LONG     -2147483647.0
+#define MAX_LONG      2147483647.0
+
+
+// --- EXTENT MAINTENANCE STRUCTURE ---
+
+
+typedef struct
+{
+
+	unsigned long lOffset;
+	Point_DD lMin;
+	Point_DD lMax;
+	short sNumber;
+
+} extent_ob;
+
+
+typedef struct
+{
+
+	short sX;
+	short sY;
+
+} SPoint;
+
+
+typedef struct
+{
+
+	float fX;
+	float fY;
+
+} FPoint;
+
+
+typedef struct
+{
+
+	H_VV* hVV;                   // Handle of VV with extents
+	H_VVV* hVVV;                 // Handle of VVV with extents
+	long lTotalExtents;          // Total Extents in Table
+	long lAlocatedExtents;       // Total Allocated Extents
+
+	long lFileSize;              // Size of the Plot File
+	long lNewFileSize;           // New File Size
+	long lPlotFileSize;          // Plot File Size
+	long lLastExtent;            // Last Extent
+	long lSaveExtent;            // Save Extent Minimum Numbers
+
+	Point_DD lMinExt;            // Minimum Extents
+	Point_DD lMaxExt;            // Maximum Extents
+
+	H_PMF* hPMF;                 // Plot Object
+	H_PMF* hSPMF;                // Save Object
+
+	VOL_STR* szPlotName;         // Plot File Name
+	VOL_STR* szSaveName;         // Save File Name
+
+	long lBuffCounter;           // Write Buffer Counter
+	VOL_BYT* pWriteBuffer;       // Write buffer Location
+
+} ppedt_ob;
+
+
+// --- TEXT CONTROL STRUCTURE ---
+
+typedef struct
+{
+
+	double height;
+	double width;
+	double space;
+	double slant;
+
+	Point_DD orig;
+
+	double cos;                  // Current Cos Cofactor
+	double sin;                  // Current Sin Cofactor
+	double xs;                   // X Scale
+	double ys;                   // Y Scale
+
+	short flags;
+
+} text_ob;
+
+
+// --- THE OBJECT STORAGE ---
+
+struct h_pp
+{
+
+
+	// --- GENERAL OBJECTS ---
+
+	H_AP* hAP;                   // AP Handle
+	H_DD* hDD;                   // DD Handle
+	H_MP* hMP;                   // MP Handle
+	H_GFN* hGFN;                 // GFN Handle
+	H_LPT* hLPT;                 // LPT Handle
+	ppedt_ob* pEdit;             // Edit Object
+
+
+	// --- DD capabilities ---
+
+	bool fTextDD;             // DD supports text
+	bool fDashDD;             // DD supports dash lines
+
+
+	// --- ATTRIBUTES STORAGE ---
+
+	H_VV* hVVAttribs;            // VV Object holding Attributes
+	short sNAttribs;             // Number of Attributes
+
+	Att_PP CurAttrib;            // Attribute Zero
+	const lpt_ob* pLpt;          // Current Line Pattern
+
+
+	// --- RENDERING STORAGE ---
+
+	double matrix[3][3];                         // Translation Matrix
+	Box_PP window;                               // Real Coordinate Window (same as clip)
+	Point_DD clipll;                             // Lower Left Region to clip
+	Point_DD clipur;                             // Upper Right Region to clip
+
+	long linacc;                                 // Line Pattern Accumulator
+	short use_lpt;                               // Use lpts ?
+	short sNoFill;                               // Do a Fill ?
+	short sNoDraw;                               // Do a Draw ?
+	Point_DD dloc;                               // Current Device Location
+
+	long dxmax;                                  // Maximum device size in X
+	long dymax;                                  // Maximum device size in Y
+
+	Point_PP origin;                             // Current Origin
+	long PMFOrigin;                              // Origin for short PMF conversions
+
+	VOL_BYT pDataBuff[PMF_PP_READ_BUFFER];       // Data Storage Buffer
+
+
+	// --- Used to generate extents ---
+
+	short sDoExtents;            // Turns Extent ONLY mode ON/OFF
+	Point_DD lMin;               // Minimum Extents
+	Point_DD lMax;               // Maximum Extents
+
+
+	// --- DEBUGING INFORMATION ---
+
+	long obj_id;                 // Id number of this object
+
+};
+
+
+
+// --- Internal Function Prototypes ---
+
+
+
+//-----------------------------------------------------------------------------
+//  ------------------------------ MAIN MODULE ------------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// IMatrix_PP:  Multiplies two 3x3 matrixes.
+//
+//
+
+void IMatrix_PP(double[3][3],   // First Matrix
+                double[3][3],   // Second Matrix
+                double[3][3]);  // Result Matrix
+
+//-----------------------------------------------------------------------------
+// ISetClip_PP:  Sets the clip region in device coordinates.
+//
+
+
+void ISetClip_PP(H_PP*,         // PP Object
+                 Point_DD,      // Lower Left point
+                 Point_DD);     // Upper right point to clip
+
+
+//-----------------------------------------------------------------------------
+// IVisible_PP: Determines if a point is in the viewport region.
+//
+// Returns  :  0 - Not in viewport region
+//             1 - In the viewport region
+//
+
+short IVisible_PP(H_PP*,        // PP Object
+                  Point_DD);    // Point to check
+
+
+
+
+//-----------------------------------------------------------------------------
+//  ----------------------------- LOW LEVEL MODULE --------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// IVect_PP: Draws a line from the current point to the point given. The
+//           coordinates are in device coordinates and the line is clipped
+//           to be within the viewport.
+//
+
+void IVect_PP(H_PP*,            // PP Object
+              Point_DD,         // First Point in the line
+              Point_DD);        // Second Point in the line
+
+
+//-----------------------------------------------------------------------------
+// IDashLn_PP:  Draws a dashed line usign the line pattern object's dash
+//              information. This function takes care of clipping the line
+//              before drawing it and adding the length of the clipped part
+//              of the line to the accumulator. If the no clip flag is set
+//
+// Returns:     Current Value of the accumulator (used for multiline draws)
+
+long IDashLn_PP(      H_PP*,            // PP Object
+                Point_DD,               // First Point
+                Point_DD,               // Second Point
+                const lpt_ob*,          // Line Patter object to use
+                long,                   // Line pitch to use
+                long);                  // Accumulator
+
+
+
+//-----------------------------------------------------------------------------
+// IDashSeg_PP:  Draws a dashed line usign the line pattern object's dash
+//               information. This function does no clipping and assumes the
+//               line will fit on the device.
+//
+// Returns:      Current value of the accumulator
+
+long IDashSeg_PP(      H_PP*,           // PP Object
+                 Point_DD,              // First Point
+                 Point_DD,              // Second Point
+                 const lpt_ob*,         // Line Patter object to use
+                 long,                  // Line pitch to use
+                 long);                 // Accumulator
+
+
+//-----------------------------------------------------------------------------
+// ISide_PP:  Function determines to which side of the viewport the point is
+//            located. Two of these may be set :
+//
+//             0 Left            1 Right
+//             2 Above           4 Below
+//
+// Returns:    A composite of the locations.
+
+short ISide_PP(Point_DD*,       // DD point to check
+               Point_DD,        // Lower Left side to clip
+               Point_DD);       // Upper Right side to clip
+
+
+//-----------------------------------------------------------------------------
+// IClipLn_PP:   Clips a line to a viewport. It uses integer math to do the
+//               actual clipping.
+//
+// Returns:    0 - Reject Entire Line (out of viewport)
+//             1 - Line is at least paritially visible
+
+short IClipLn_PP(H_PP*,         // PP Object
+                 Point_DD*,     // First Point
+                 Point_DD*);    // Second Point
+
+//-----------------------------------------------------------------------------
+// IClipPoly_PP: Clips a polygon to a viewport. This assumes that the polyon
+//               is at leas partially inside the viewport region. Make sure
+//               to pass it an array of return points large enough to hold
+//               the worst case clip senario (2 * npts).
+//
+// Returns:      Number of points resulting when the polygon is clipped.
+
+long IClipPoly_PP(H_PP*,        // PP Object
+                  long,         // Number of points in the polygon
+                  Point_DD*,    // The actual points
+                  Point_DD*);   // Resulting Points
+
+
+//-----------------------------------------------------------------------------
+// IClipEdge_PP : Internal function to clip a polygon to one edge of the viewport.
+//                It takes all the arguments that ClipPoly_PP takes but only
+//                handles clipping of one edge.
+//
+
+void IClipEdge_PP(long,         // Number of points in polygon
+                  Point_DD*,    // Actual polygon points
+                  long*,        // Number of clipped points
+                  Point_DD*,    // Actual clipped points
+                  long,         // Location of the edge
+                  short);       // Edge corresponds to x or y as well as inside
+                                // 0 for x      1 for y
+                                // 0 for less   1 for greater    (is inside)
+
+
+
+//-----------------------------------------------------------------------------
+// IMVect_PP:  Internal vector rendering function that Point_DD values and
+//             renders them quickly. This function assumes points in device
+//             coordinates.
+//
+// Returns:    Nothing.
+
+void IMVect_PP(H_PP*,           // PP handle
+               Point_DD*,       // chain of points
+               long,            // number of points in the chain
+               short,           // Are all the points visible ?
+               short);          // Do we use Line Patterns ?
+
+
+//-----------------------------------------------------------------------------
+// IPVect_PP:  Internal vector rendering function that takes multiple inputs.
+//             This allows you to plot vectors of different types:
+//
+//             TYPE field :     0       - double
+//                              1       - float
+//                              2       - short (with origin correction)
+//                                        in .05 centimeters (50 microns)
+//
+// Returns:    Nothing.
+
+void IPVect_PP(H_PP*,           // PP handle
+               CON_DAT*,        // chain of points
+               long,            // number of points in the chain
+               short,           // Type of data and conversion to do
+               short);          // Include the current point ?
+
+
+
+//-----------------------------------------------------------------------------
+// VFill_PP:   Internal function to actualy generate a fill that translates
+//             coordinates based on type.
+//
+// Note:       This functions asssumes that a buffer of a least 2*npts is
+//             passed to it so it is the callers responsibility to ensure
+//             that the buffer exists.
+//
+// Returns:    Nothing.
+//
+
+void VFill_PP(H_PP*,            // PP Object
+              CON_DAT*,         // Point buffer
+              long,             // Number of points
+              short,            // What type see Defines
+              short);           // Draw the Border ?
+
+
+//-----------------------------------------------------------------------------
+// IFill_PP:   Internal function to actualy generate a fill given a list
+//             of already translated coordinates.
+//
+// Note:       This functions asssumes that a buffer of a least 2*npts is
+//             passed to it so it is the callers responsibility to ensure
+//             that the buffer exists.
+//
+// Returns:    Nothing.
+//
+
+void IFill_PP(H_PP*,            // PP Object
+              Point_DD*,        // Point buffer
+              long,             // Number of points
+              short);           // Are all the points visible ?
+
+
+//-----------------------------------------------------------------------------
+// ICircle_PP :  Internal function to generate the next point in a circle.
+//
+// Returns:      Changes the current point.
+
+void ICircle_PP(double,         // Sin coefficient
+                double,         // Cos coefficient
+                double*,        // Current X
+                double*);       // Current Y
+
+//-----------------------------------------------------------------------------
+//  -------------------------------- TEXT MODULE ----------------------------
+//-----------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------
+// IFilter_PP:   Filters a text string for special characters like %U and %D
+//               as well as changing \055 to the equivilant ASCII character.
+//
+// Returns:      A flag of the translated string. The string will be changed.
+
+short IFilter_PP(VOL_STR*);   // Text to filter
+
+
+//-----------------------------------------------------------------------------
+// ILocate_PP:   Takes a stroke and returns the point in device cooridnates
+//               that the strokes correspond too.
+//
+// Returns:      Point in device coordinates.
+
+
+Point_DD ILocate_PP(short,              // X value of stroke
+                    short,              // Y value of stroke
+                    text_ob*);          // Information on how to draw the character
+
+
+//-----------------------------------------------------------------------------
+// IChar_PP:   Plots a character at the current text location. Used internally
+//             by the PTxt_PP routine to draw the text.
+//
+// Returns :   Width of the character just drawn.
+//
+
+short IChar_PP(H_PP*,                   // PP Handle
+               GSIN_CON_STR**,          // Character stream pointer (will be incremented to next character)
+               text_ob*);               // Information on how to render this text
+
+
+//-----------------------------------------------------------------------------
+// IPSymb:   Internal poly symbol rendering function that can use multiple
+//           input types.
+//
+// Returns:  Nothing
+
+void IPSymb_PP(H_PP*,           // PP handle
+               short,           // symbols to plot
+               long,            // number of symbols
+               double,          // scale relative to current text attribute
+               double,          // rotation angle
+               CON_DAT*,        // symbol locations
+               short);          // Type of locations
+
+
+//-----------------------------------------------------------------------------
+// IText_PP:   Plots an entire string to the current text location, advancing
+//             for each space. Used by the Text_PP routine to draw text.
+//
+
+void IText_PP(H_PP*,            // PP Object
+              GSIN_CON_STR*,    // Text to draw
+              text_ob*);        // Information on how to render this text
+
+
+//-----------------------------------------------------------------------------
+//  ------------------------------- PMF MODULE ----------------------------
+//-----------------------------------------------------------------------------
+
+
+
+//-----------------------------------------------------------------------------
+// lAttrPmf_PP:  Generates Attribute Overides from a PMF 2000.
+//
+// Returns:      0 - Ok.
+//               x - Error.
+
+long lAttrPmf_PP(CON_BYT*,      // Buffer holding attribute overrides
+                 long,          // Number of bytes in override
+                 Att_PP*,       // Attribute to overide
+                 long*);        // Which attributes were changed ?
+
+
+
+//-----------------------------------------------------------------------------
+//  ----------------------------- EDT PMF MODULE ----------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// lIDoPMF_PP:   Internal PMF rendering rountine.
+//
+// Returns:      0 - Ok
+//               x - Error
+
+long lIDoPMF_PP(H_PP*,          // PP Object
+                extent_ob*,     // Extent object
+                short,          // In Save File ?
+                short*);        // Count Value
+
+
+
+//-----------------------------------------------------------------------------
+// lMakeAttrPmf_PP:  Makes a PMF 2000 Data Block from current Overides.
+//
+// Returns:          Number of Bytes in Data Block
+
+long lMakeAttrPmf_PP(Att_PP*,           // Attribute overide to use
+                     VOL_BYT*,          // Buffer to put the data
+                     long);             // Which attributes to write ?
+
+
+//-----------------------------------------------------------------------------
+// lAddExt_PP:      Adds an Extent to the extents list. If it is a graphical
+//                  entity then the extents determine the max extents.
+//
+// Returns:         Extent Sequence Number.
+//                  -1 Error
+
+long lAddExt_PP(H_PP*,          // PP Object
+                extent_ob*);    // Extent to Add
+
+
+//-----------------------------------------------------------------------------
+// pGetExt_PP:      Gets a pointer to the extent specified by the ID. This is
+//                  only valid until the next call to any PP extent handling
+//                  function.
+
+extent_ob* pGetExt_PP(H_PP*,    // PP Object
+                      long);    // ID of Extent
+
+
+//-----------------------------------------------------------------------------
+// IRect_PP:   Determines if an object rectangle is visible compared to a
+//             Region rectangle. The math is done with DD coordinates and
+//             is designed to be very efficient.
+//
+// Returns:    0 - Not Visible
+//             1 - Partially Visible
+//             2 - Completely Visible
+
+short IRect_PP(Point_DD*,       // Minimum Region
+               Point_DD*,       // Maximum Region
+               Point_DD*,       // Object Minimum Region
+               Point_DD*);      // Object Maximum Region
+
+
+//-----------------------------------------------------------------------------
+// ITrans_PP:  Translates and scales a group of points. The results are
+//             placed back into the read buffer.
+//
+// Note:       Translations is this formula :
+//
+//                      ((point - minimum_origin) * scale) + new_origin
+//
+// Returns:    Nothing.
+
+void ITrans_PP(H_PP*,           // PP Object
+               long,            // Number of entries to translate
+               VOL_BYT*,        // Location of data
+               short,           // Conversion Factor
+               Point_DD*,       // Old Origin
+               Point_DD*,       // New Origin
+               Point_PP*);      // New Scale
+
+
+
+//-----------------------------------------------------------------------------
+// lIData_PP :  Writes blocks of data to the output save file with buffering.
+//
+// Returns:     0 - OK
+//              x - Error
+
+long lIData_PP(H_PP*,           // PP File to write to
+               long,            // Number of entries to write
+               VOL_BYT*);       // Data Location
+
+
+//-----------------------------------------------------------------------------
+// lICopy_PP :  Copies a block of data on the plot/save file to the plot file
+//              and modifies/copies the extents to reflect the changes.
+
+long lICopy_PP(H_PP*,           // PP Object
+               long*,           // Current At Location
+               long,            // Starting Extent to copy
+               long,            // Ending Extent to copy
+               short);          // 0 - Plot File, 1 - Save File
+
+//-----------------------------------------------------------------------------
+//  ----------------------------- EXTENTS MODULE ----------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// IPExt_PP:  Generates extents on a set of points and places them in the
+//            PP Extents. This is used when getting extents for objects.
+//
+// Returns:   Nothing.
+
+void IPExt_PP(H_PP*,            // PP handle
+              Point_DD*,        // Points
+              long);            // number of points in the chain
+
+
+//-----------------------------------------------------------------------------
+// lExtPmf_PP:      Adds a PMF to the extents list. This function will only
+//                  support NEW PMF's (2,3,1000-1255 PMFS are not supported).
+//
+// Returns:         0 Ok
+//                  x Error
+
+long lExtPmf_PP(         H_PP*, // PP Object
+                H_PMF*,         // PMF OBject
+                Entity_PMF*,    // PMF to add to extents list
+                unsigned long,  // Offset Into the File
+                extent_ob*);    // Where to put the new extent
+
+
+
+#endif
