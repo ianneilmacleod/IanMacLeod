@@ -10,7 +10,7 @@ Created on Sun Jan  5 10:15:34 2014
 #TODO: graphics - show the som adjusting as it goes.
 
 # comment-out following 2 lines to support remote debugging
-import pydevd
+#import pydevd
 #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
 import os
@@ -27,9 +27,10 @@ import geosoft.gxpy.gdb as gxgdb
 import geosoft.gxpy.utility as gxu
 
 try:
-    import modules.mvar as mvar
+    import mvar
 except:
-    modules_folder = os.path.split(os.path.split(__file__)[0])[0]
+    # this depends on the modules folder being up two folders from this source file
+    modules_folder = os.path.split(os.path.split(os.path.split(__file__)[0])[0])[0]
     sys.path.append(modules_folder)
     import modules.mvar as mvar
 
@@ -180,7 +181,7 @@ class SomDialog(QtWidgets.QDialog, Ui_som_om):
         self.filterVal.setText(self.filter[1])
 
         #database name
-        self.databaseName.setText(self.gdb.file_name())
+        self.databaseName.setText(self.gdb.file_name)
 
     def results(self):
         indata = {}
@@ -351,7 +352,7 @@ if __name__ == '__main__':
         settings['SOM_PARAMETERS'] = (4, 2, mvar.similarity_functions()[0])
 
     gdb_name = os.path.normpath(settings['GDB_NAME'])
-    gdb = gxgdb.GXdb.open(gdb_name)
+    gdb = gxgdb.Geosoft_gdb.open(gdb_name)
 
     #launch GUI
     app = QtWidgets.QApplication([])

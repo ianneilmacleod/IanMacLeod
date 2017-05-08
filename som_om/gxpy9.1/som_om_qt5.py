@@ -27,9 +27,10 @@ import geosoft.gxpy.gdb as gxgdb
 import geosoft.gxpy.utility as gxu
 
 try:
-    import modules.mvar as mvar
+    import mvar
 except:
-    modules_folder = os.path.split(os.path.split(__file__)[0])[0]
+    # this depends on the modules folder being up two folders from this source file
+    modules_folder = os.path.split(os.path.split(os.path.split(__file__)[0])[0])[0]
     sys.path.append(modules_folder)
     import modules.mvar as mvar
 

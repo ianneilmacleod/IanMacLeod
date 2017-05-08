@@ -6,16 +6,16 @@ Created on Sun Jan  5 10:15:34 2014
 """
 
 #The following 2 lines to support remote debugging
-import pydevd
+#import pydevd
 #pydevd.settrace('localhost', port=34765, stdoutToServer=True, stderrToServer=True)
 
 import os
-import json
 
-from geosoft import __version__
+import geosoft
 import geosoft.gxapi as gxapi
 import geosoft.gxpy.utility as gxu
-import geosoft.gxpy.om as gxom
+import geosoft.gxpy.project as gxpj
+import geosoft.gxpy.gdb as gxgdb
 
 #t translation
 def _(s): return s
@@ -32,14 +32,13 @@ def _same(f1, f2):
 
 def rungx():
 
-    gxu.check_version('9.1')
+    gxu.check_version('9.2')
 
-    # get database state
-    try:
-        state = gxom.state()['gdb']
-        gdb_name = state['current']
-    except:
-        gxom.message(_('No current database'), _('An open database is required.'))
+    with gxpj.Geosoft_project() as pj:
+        gdb_name = pj.current_database
+        if not gdb_name:
+            gxpj.message(_('No current database'), _('An open database is required.'))
+        state = pj.current_db_state()
 
     # settings
     settings = gxu.get_parameters('SOM_OM')
@@ -47,7 +46,8 @@ def rungx():
     # if different database, reset database-dependent settings
     if not _same(gdb_name, settings.get('GDB_NAME', '')):
         settings['GDB_NAME'] = os.path.normpath(gdb_name)
-        chans = state['disp_chan_list']
+        with gxgdb.Geosoft_gdb() as gdb:
+            chans = state['disp_chan_list']
         channorm = {}
         for c in chans:
             channorm[c] = 0
