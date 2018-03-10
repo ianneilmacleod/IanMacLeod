@@ -39,17 +39,28 @@ def login():
 def maki():
 
     # get derivative argument as '?d'
-    derivative = request.args.get('d', default=gxgrdu.TILT_ANGLE, type=int)
-    if derivative < 0 or derivative > gxgrdu.TILT_ANGLE:
+    derivative = request.args.get('d', default=-1, type=int)
+    if derivative < -1 or derivative > gxgrdu.TILT_ANGLE:
         derivative = gxgrdu.TILT_ANGLE
+    cs = request.args.get('cs', default='')
+
+    # get coordinate system
 
     # process the grid and create an image
     grid_file = 'bhn_tmi_250m.grd'
     grid_path = './app/data/{}'.format(grid_file)
-    image_ref = '/static/{}.d{}.png'.format(grid_file, str(derivative))
+    if derivative >= 0:
+        image_ref = '/static/{}.d{}.png'.format(grid_file, str(derivative))
+    elif cs:
+        image_ref = '/static/{}.cs.png'.format(grid_file)
+    else:
+        image_ref = '/static/{}.png'.format(grid_file)
     image_path = './app' + image_ref
     if (not os.path.exists(image_path)) or os.path.getmtime(image_path) < os.path.getmtime(grid_path):
-        grd = gxgrd.Grid.open(grid_path, mode=gxgrd.FILE_READ)
-        gxgrdu.derivative(grd, int(derivative)).image_file(image_path, shade=True, pix_width=500)
+        grd = gxgrd.Grid.open(grid_path, mode=gxgrd.FILE_READ, coordinate_system=cs)
+        if derivative == -1:
+            grd.image_file(image_path, shade=True, pix_width=500)
+        else:
+            gxgrdu.derivative(grd, int(derivative)).image_file(image_path, shade=True, pix_width=500)
 
     return render_template('maki.html', title='Maki\'s page', image=image_ref)
