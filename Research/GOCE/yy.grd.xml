@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xsi:schemaLocation="http://www.isotc211.org/2005/gmd ../schemas/iso19139fra/gmd/gmd.xsd" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:map="urn:brgm:mapping" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gco="http://www.isotc211.org/2005/gco">
+	<geosoft xmlns="http://www.geosoft.com/schema/geo">
+		<dataset version="1">
+			<lineage>
+				<process name="bigrid.gx" displaystring="Bi-directional line gridding" user="IAN-OFFICE\Ian" version="Version 9.4 (20180327.13139)" date="2018-03-28" time="08:26:42">
+					<parameter name="BIGRID::CHAN" value="yy" type="string"/>
+					<parameter name="BIGRID::CS" value="0.4" type="string"/>
+					<parameter name="BIGRID::FDX" value="" type="string"/>
+					<parameter name="BIGRID::GAPLIM" value="" type="string"/>
+					<parameter name="BIGRID::GRAD" value="" type="string"/>
+					<parameter name="BIGRID::GRID" value=".\yy.grd(GRD)" type="string"/>
+					<parameter name="BIGRID::GYN" value="" type="string"/>
+					<parameter name="BIGRID::ISP1" value="" type="string"/>
+					<parameter name="BIGRID::ISP2" value="" type="string"/>
+					<parameter name="BIGRID::KX" value="" type="string"/>
+					<parameter name="BIGRID::LOGMIN" value="" type="string"/>
+					<parameter name="BIGRID::LOGOPT" value="" type="string"/>
+					<parameter name="BIGRID::NEX" value="" type="string"/>
+					<parameter name="BIGRID::PRESORT" value="" type="string"/>
+					<parameter name="BIGRID::RUNMODE" value="0" type="integer"/>
+					<parameter name="BIGRID::SMX" value="" type="string"/>
+					<parameter name="BIGRID::TOLN" value="" type="double"/>
+					<parameter name="BIGRID::TRA" value="" type="string"/>
+					<parameter name="BIGRID::WL" value="" type="string"/>
+					<parameter name="BIGRID::WS" value="" type="double"/>
+					<parameter name="BIGRID::XYRANGE" value="" type="string"/>
+					<source name="G:\Projects\GOCE\From Colin, 2018-3-27\GOCE.gdb" type="DB"/>
+				</process>
+			</lineage>
+			<title>yy</title>
+			<file_format>Geosoft Grid</file_format>
+			<project_name>g:\projects\goce\from colin, 2018-3-27\goce.gpf</project_name>
+			<data_created_by>IAN-OFFICE\Ian</data_created_by>
+			<data_creation_date>2018-03-28</data_creation_date>
+			<metadata_created_by>IAN-OFFICE\Ian</metadata_created_by>
+			<metadata_creation_date>2018-03-28</metadata_creation_date>
+			<georeference>
+				<dataextents>
+					<extent2d minx="-180.4" miny="-84" maxx="180" maxy="83.200000000000017"/>
+				</dataextents>
+				<projection type="GEOGRAPHIC" name="WGS 84" ellipsoid="WGS 84" datum="WGS 84" wellknown_epsg="4326" datumtrf="WGS 84" datumtrf_description="[WGS 84] World" radius="6378137" eccentricity="0.0818191908426215">
+					<shift x="0" y="0" z="0"/>
+					<units name="dega" unit_scale="1"/>
+				</projection>
+			</georeference>
+		</dataset>
+	</geosoft>
+	<gmd:dataQualityInfo>
+		<gmd:DQ_DataQuality>
+			<gmd:lineage>
+				<gmd:LI_Lineage>
+					<gmd:processStep xlink:type="Geosoft Process" xlink:title="bigrid.gx">
+						<gmd:LI_ProcessStep>
+							<gmd:dateTime>
+								<gco:DateTime>2018-03-28T08:26:42</gco:DateTime>
+							</gmd:dateTime>
+							<gmd:processor>
+								<gmd:CI_ResponsibleParty>
+									<gmd:individualName>
+										<gco:CharacterString>IAN-OFFICE\Ian</gco:CharacterString>
+									</gmd:individualName>
+								</gmd:CI_ResponsibleParty>
+							</gmd:processor>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::CHAN" xlink:title="yy">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::CS" xlink:title="0.4">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::FDX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::GAPLIM" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::GRAD" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::GRID" xlink:title=".\yy.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::GYN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::ISP1" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::ISP2" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::KX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::LOGMIN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::LOGOPT" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::NEX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::PRESORT" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::RUNMODE" xlink:title="0">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::SMX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::TOLN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::TRA" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::WL" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::WS" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="BIGRID::XYRANGE" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Source" xlink:role="DB" xlink:title="G:\Projects\GOCE\From Colin, 2018-3-27\GOCE.gdb">
+								<gmd:LI_Source/>
+							</gmd:source>
+						</gmd:LI_ProcessStep>
+					</gmd:processStep>
+				</gmd:LI_Lineage>
+			</gmd:lineage>
+		</gmd:DQ_DataQuality>
+	</gmd:dataQualityInfo>
+	<gmd:identificationInfo>
+		<gmd:MD_DataIdentification>
+			<gmd:citation>
+				<gmd:CI_Citation>
+					<gmd:title>
+						<gco:CharacterString>yy</gco:CharacterString>
+					</gmd:title>
+					<gmd:collectiveTitle>
+						<gco:CharacterString>g:\projects\goce\from colin, 2018-3-27\goce.gpf</gco:CharacterString>
+					</gmd:collectiveTitle>
+					<gmd:date>
+						<gmd:CI_Date>
+							<gmd:date>
+								<gco:Date>2018-3-28</gco:Date>
+							</gmd:date>
+						</gmd:CI_Date>
+					</gmd:date>
+				</gmd:CI_Citation>
+			</gmd:citation>
+			<gmd:resourceFormat>
+				<gmd:MD_Format>
+					<gmd:name>
+						<gco:CharacterString>Geosoft Grid</gco:CharacterString>
+					</gmd:name>
+				</gmd:MD_Format>
+			</gmd:resourceFormat>
+			<gmd:pointOfContact>
+				<gmd:CI_ResponsibleParty>
+					<gmd:individualName>
+						<gco:CharacterString>IAN-OFFICE\Ian</gco:CharacterString>
+					</gmd:individualName>
+				</gmd:CI_ResponsibleParty>
+			</gmd:pointOfContact>
+			<gmd:extent>
+				<gmd:EX_Extent>
+					<gmd:geographicElement>
+						<gmd:EX_GeographicBoundingBox>
+							<gmd:westBoundLongitude>
+								<gco:Decimal>-180.4</gco:Decimal>
+							</gmd:westBoundLongitude>
+							<gmd:eastBoundLongitude>
+								<gco:Decimal>180</gco:Decimal>
+							</gmd:eastBoundLongitude>
+							<gmd:southBoundLatitude>
+								<gco:Decimal>-84</gco:Decimal>
+							</gmd:southBoundLatitude>
+							<gmd:northBoundLatitude>
+								<gco:Decimal>83.200000000000017</gco:Decimal>
+							</gmd:northBoundLatitude>
+						</gmd:EX_GeographicBoundingBox>
+					</gmd:geographicElement>
+				</gmd:EX_Extent>
+			</gmd:extent>
+		</gmd:MD_DataIdentification>
+	</gmd:identificationInfo>
+	<gmd:contact>
+		<gmd:CI_ResponsibleParty>
+			<gmd:individualName>
+				<gco:CharacterString>IAN-OFFICE\Ian</gco:CharacterString>
+			</gmd:individualName>
+		</gmd:CI_ResponsibleParty>
+	</gmd:contact>
+	<gmd:dateStamp>
+		<gco:Date>2018-3-28</gco:Date>
+	</gmd:dateStamp>
+	<gmd:referenceSystemInfo>
+		<gmd:MD_ReferenceSystem>
+			<gmd:referenceSystemIdentifier>
+				<gmd:RS_Identifier>
+					<gmd:codeSpace>
+						<gco:CharacterString>ESRI</gco:CharacterString>
+					</gmd:codeSpace>
+					<gmd:code>
+						<gco:CharacterString>GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433],AUTHORITY["EPSG",4326]]</gco:CharacterString>
+					</gmd:code>
+					<gmd:version>
+						<gco:CharacterString>1</gco:CharacterString>
+					</gmd:version>
+				</gmd:RS_Identifier>
+			</gmd:referenceSystemIdentifier>
+		</gmd:MD_ReferenceSystem>
+	</gmd:referenceSystemInfo>
+</gmd:MD_Metadata>
