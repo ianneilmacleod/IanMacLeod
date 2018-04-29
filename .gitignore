@@ -94,3 +94,4 @@ venv.bak/
 *.png
 *.png.gi
 *.png.xml
+/Research/GOCE/goce.gpf
