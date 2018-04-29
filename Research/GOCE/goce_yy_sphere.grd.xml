@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xsi:schemaLocation="http://www.isotc211.org/2005/gmd ../schemas/iso19139fra/gmd/gmd.xsd" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:map="urn:brgm:mapping" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gco="http://www.isotc211.org/2005/gco">
+	<geosoft xmlns="http://www.geosoft.com/schema/geo">
+		<dataset version="1">
+			<title>goce_xx_sphere</title>
+			<file_format>Geosoft Grid</file_format>
+			<project_name>c:\development\github\ianmacleod\research\goce\goce.gpf</project_name>
+			<data_created_by>Ian MacLeod</data_created_by>
+			<data_creation_date>2018-04-29</data_creation_date>
+			<metadata_created_by>Ian MacLeod</metadata_created_by>
+			<metadata_creation_date>2018-04-29</metadata_creation_date>
+			<lineage>
+				<process name="gridwind.gx" displaystring="GRIDWIND" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:19:01">
+					<parameter name="GRIDWIND::CLIP" value="DUMMIED" type="string"/>
+					<parameter name="GRIDWIND::COORD" value="GRID" type="string"/>
+					<parameter name="GRIDWIND::CSIZE" value="" type="string"/>
+					<parameter name="GRIDWIND::DEC" value="" type="string"/>
+					<parameter name="GRIDWIND::GRD" value=".\xx.grd(GRD)" type="string"/>
+					<parameter name="GRIDWIND::NEW" value=".\goce_xx_sphere.grd(GRD)" type="string"/>
+					<parameter name="GRIDWIND::XMAX" value="902" type="double"/>
+					<parameter name="GRIDWIND::XMIN" value="2" type="double"/>
+					<parameter name="GRIDWIND::YMAX" value="" type="string"/>
+					<parameter name="GRIDWIND::YMIN" value="" type="string"/>
+					<parameter name="GRIDWIND::ZMAX" value="" type="string"/>
+					<parameter name="GRIDWIND::ZMIN" value="" type="string"/>
+					<source name="c:\development\github\ianmacleod\Research\GOCE\xx.grd" type="GRID">
+						<lineage>
+							<process name="bigrid.gx" displaystring="Bi-directional line gridding" user="IAN-OFFICE\Ian" version="Version 9.4 (20180327.13139)" date="2018-03-28" time="08:27:14">
+								<parameter name="BIGRID::CHAN" value="xx" type="string"/>
+								<parameter name="BIGRID::CS" value="0.4" type="string"/>
+								<parameter name="BIGRID::FDX" value="" type="string"/>
+								<parameter name="BIGRID::GAPLIM" value="" type="string"/>
+								<parameter name="BIGRID::GRAD" value="" type="string"/>
+								<parameter name="BIGRID::GRID" value=".\xx.grd(GRD)" type="string"/>
+								<parameter name="BIGRID::GYN" value="" type="string"/>
+								<parameter name="BIGRID::ISP1" value="" type="string"/>
+								<parameter name="BIGRID::ISP2" value="" type="string"/>
+								<parameter name="BIGRID::KX" value="" type="string"/>
+								<parameter name="BIGRID::LOGMIN" value="" type="string"/>
+								<parameter name="BIGRID::LOGOPT" value="" type="string"/>
+								<parameter name="BIGRID::NEX" value="" type="string"/>
+								<parameter name="BIGRID::PRESORT" value="" type="string"/>
+								<parameter name="BIGRID::RUNMODE" value="0" type="integer"/>
+								<parameter name="BIGRID::SMX" value="" type="string"/>
+								<parameter name="BIGRID::TOLN" value="" type="double"/>
+								<parameter name="BIGRID::TRA" value="" type="string"/>
+								<parameter name="BIGRID::WL" value="" type="string"/>
+								<parameter name="BIGRID::WS" value="" type="double"/>
+								<parameter name="BIGRID::XYRANGE" value="" type="string"/>
+								<source name="G:\Projects\GOCE\From Colin, 2018-3-27\GOCE.gdb" type="DB"/>
+							</process>
+						</lineage>
+					</source>
+				</process>
+				<process name="geogxnet.dll(Geosoft.GX.GridUtils.GridStat;Run)" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:22:40">
+					<parameter name="GRIDSTAT::DX" value="0.4" type="double"/>
+					<parameter name="GRIDSTAT::DY" value="0.4" type="double"/>
+					<parameter name="GRIDSTAT::GRID" value=".\goce_yy_sphere.grd(GRD)" type="string"/>
+					<parameter name="GRIDSTAT::MODIFY_ONLY" value="" type="integer"/>
+					<parameter name="GRIDSTAT::ROT" value="0" type="double"/>
+					<parameter name="GRIDSTAT::ROT1" value="0" type="double"/>
+					<parameter name="GRIDSTAT::SKIP_GRID_DIALOG" value="1" type="integer"/>
+					<parameter name="GRIDSTAT::X0" value="-180" type="double"/>
+					<parameter name="GRIDSTAT::Y0" value="-84" type="double"/>
+					<parameter name="IPJSET::PROJECTION" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+					<source name="c:\development\github\ianmacleod\Research\GOCE\goce_yy_sphere.grd" type="GRID">
+						<lineage>
+							<process name="gridwind.gx" displaystring="GRIDWIND" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:19:01">
+								<parameter name="GRIDWIND::CLIP" value="DUMMIED" type="string"/>
+								<parameter name="GRIDWIND::COORD" value="GRID" type="string"/>
+								<parameter name="GRIDWIND::CSIZE" value="" type="string"/>
+								<parameter name="GRIDWIND::DEC" value="" type="string"/>
+								<parameter name="GRIDWIND::GRD" value=".\xx.grd(GRD)" type="string"/>
+								<parameter name="GRIDWIND::NEW" value=".\goce_xx_sphere.grd(GRD)" type="string"/>
+								<parameter name="GRIDWIND::XMAX" value="902" type="double"/>
+								<parameter name="GRIDWIND::XMIN" value="2" type="double"/>
+								<parameter name="GRIDWIND::YMAX" value="" type="string"/>
+								<parameter name="GRIDWIND::YMIN" value="" type="string"/>
+								<parameter name="GRIDWIND::ZMAX" value="" type="string"/>
+								<parameter name="GRIDWIND::ZMIN" value="" type="string"/>
+								<source name="c:\development\github\ianmacleod\Research\GOCE\xx.grd" type="GRID"/>
+							</process>
+						</lineage>
+					</source>
+				</process>
+				<process name="geogxnet.dll(Geosoft.GX.GridUtils.GridStat;Run)" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:22:40">
+					<parameter name="GRIDSTAT::DX" value="0.4" type="double"/>
+					<parameter name="GRIDSTAT::DY" value="0.4" type="double"/>
+					<parameter name="GRIDSTAT::GRID" value=".\goce_yy_sphere.grd(GRD)" type="string"/>
+					<parameter name="GRIDSTAT::MODIFY_ONLY" value="" type="integer"/>
+					<parameter name="GRIDSTAT::ROT" value="0" type="double"/>
+					<parameter name="GRIDSTAT::ROT1" value="0" type="double"/>
+					<parameter name="GRIDSTAT::SKIP_GRID_DIALOG" value="1" type="integer"/>
+					<parameter name="GRIDSTAT::X0" value="-180" type="double"/>
+					<parameter name="GRIDSTAT::Y0" value="-84" type="double"/>
+					<parameter name="IPJSET::PROJECTION" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+					<source name="c:\development\github\ianmacleod\Research\GOCE\goce_yy_sphere.grd" type="GRID">
+						<lineage>
+							<process name="gridwind.gx" displaystring="GRIDWIND" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:19:01">
+								<parameter name="GRIDWIND::CLIP" value="DUMMIED" type="string"/>
+								<parameter name="GRIDWIND::COORD" value="GRID" type="string"/>
+								<parameter name="GRIDWIND::CSIZE" value="" type="string"/>
+								<parameter name="GRIDWIND::DEC" value="" type="string"/>
+								<parameter name="GRIDWIND::GRD" value=".\xx.grd(GRD)" type="string"/>
+								<parameter name="GRIDWIND::NEW" value=".\goce_xx_sphere.grd(GRD)" type="string"/>
+								<parameter name="GRIDWIND::XMAX" value="902" type="double"/>
+								<parameter name="GRIDWIND::XMIN" value="2" type="double"/>
+								<parameter name="GRIDWIND::YMAX" value="" type="string"/>
+								<parameter name="GRIDWIND::YMIN" value="" type="string"/>
+								<parameter name="GRIDWIND::ZMAX" value="" type="string"/>
+								<parameter name="GRIDWIND::ZMIN" value="" type="string"/>
+								<source name="c:\development\github\ianmacleod\Research\GOCE\xx.grd" type="GRID"/>
+							</process>
+							<process name="geogxnet.dll(Geosoft.GX.GridUtils.GridStat;Run)" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:22:40">
+								<parameter name="GRIDSTAT::DX" value="0.4" type="double"/>
+								<parameter name="GRIDSTAT::DY" value="0.4" type="double"/>
+								<parameter name="GRIDSTAT::GRID" value=".\goce_yy_sphere.grd(GRD)" type="string"/>
+								<parameter name="GRIDSTAT::MODIFY_ONLY" value="" type="integer"/>
+								<parameter name="GRIDSTAT::ROT" value="0" type="double"/>
+								<parameter name="GRIDSTAT::ROT1" value="0" type="double"/>
+								<parameter name="GRIDSTAT::SKIP_GRID_DIALOG" value="1" type="integer"/>
+								<parameter name="GRIDSTAT::X0" value="-180" type="double"/>
+								<parameter name="GRIDSTAT::Y0" value="-84" type="double"/>
+								<parameter name="IPJSET::PROJECTION" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+								<source name="c:\development\github\ianmacleod\Research\GOCE\goce_yy_sphere.grd" type="GRID"/>
+							</process>
+						</lineage>
+					</source>
+				</process>
+			</lineage>
+			<georeference>
+				<dataextents>
+					<extent2d minx="-180" miny="-84" maxx="180" maxy="83.200000000000017"/>
+				</dataextents>
+				<projection type="GEOGRAPHIC" name="*Sphere" ellipsoid="Sphere" datum="*Sphere" radius="6371000" eccentricity="0">
+					<units name="dega" unit_scale="1"/>
+				</projection>
+			</georeference>
+		</dataset>
+	</geosoft>
+	<gmd:dataQualityInfo>
+		<gmd:DQ_DataQuality>
+			<gmd:lineage>
+				<gmd:LI_Lineage>
+					<gmd:processStep xlink:type="Geosoft Process" xlink:title="gridwind.gx">
+						<gmd:LI_ProcessStep>
+							<gmd:dateTime>
+								<gco:DateTime>2018-04-29T16:19:01</gco:DateTime>
+							</gmd:dateTime>
+							<gmd:processor>
+								<gmd:CI_ResponsibleParty>
+									<gmd:individualName>
+										<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+									</gmd:individualName>
+								</gmd:CI_ResponsibleParty>
+							</gmd:processor>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::CLIP" xlink:title="DUMMIED">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::COORD" xlink:title="GRID">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::CSIZE" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::DEC" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::GRD" xlink:title=".\xx.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::NEW" xlink:title=".\goce_xx_sphere.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::XMAX" xlink:title="902">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::XMIN" xlink:title="2">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::YMAX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::YMIN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::ZMAX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::ZMIN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Source" xlink:role="GRID" xlink:title="c:\development\github\ianmacleod\Research\GOCE\xx.grd">
+								<gmd:LI_Source/>
+							</gmd:source>
+						</gmd:LI_ProcessStep>
+					</gmd:processStep>
+					<gmd:processStep xlink:type="Geosoft Process" xlink:title="geogxnet.dll(Geosoft.GX.GridUtils.GridStat;Run)">
+						<gmd:LI_ProcessStep>
+							<gmd:dateTime>
+								<gco:DateTime>2018-04-29T16:22:40</gco:DateTime>
+							</gmd:dateTime>
+							<gmd:processor>
+								<gmd:CI_ResponsibleParty>
+									<gmd:individualName>
+										<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+									</gmd:individualName>
+								</gmd:CI_ResponsibleParty>
+							</gmd:processor>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::DX" xlink:title="0.4">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::DY" xlink:title="0.4">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::GRID" xlink:title=".\goce_yy_sphere.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::MODIFY_ONLY" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::ROT" xlink:title="0">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::ROT1" xlink:title="0">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::SKIP_GRID_DIALOG" xlink:title="1">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::X0" xlink:title="-180">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::Y0" xlink:title="-84">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="IPJSET::PROJECTION" xlink:title="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Source" xlink:role="GRID" xlink:title="c:\development\github\ianmacleod\Research\GOCE\goce_yy_sphere.grd">
+								<gmd:LI_Source/>
+							</gmd:source>
+						</gmd:LI_ProcessStep>
+					</gmd:processStep>
+					<gmd:processStep xlink:type="Geosoft Process" xlink:title="geogxnet.dll(Geosoft.GX.GridUtils.GridStat;Run)">
+						<gmd:LI_ProcessStep>
+							<gmd:dateTime>
+								<gco:DateTime>2018-04-29T16:22:40</gco:DateTime>
+							</gmd:dateTime>
+							<gmd:processor>
+								<gmd:CI_ResponsibleParty>
+									<gmd:individualName>
+										<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+									</gmd:individualName>
+								</gmd:CI_ResponsibleParty>
+							</gmd:processor>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::DX" xlink:title="0.4">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::DY" xlink:title="0.4">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::GRID" xlink:title=".\goce_yy_sphere.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::MODIFY_ONLY" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::ROT" xlink:title="0">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::ROT1" xlink:title="0">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::SKIP_GRID_DIALOG" xlink:title="1">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::X0" xlink:title="-180">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDSTAT::Y0" xlink:title="-84">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="IPJSET::PROJECTION" xlink:title="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Source" xlink:role="GRID" xlink:title="c:\development\github\ianmacleod\Research\GOCE\goce_yy_sphere.grd">
+								<gmd:LI_Source/>
+							</gmd:source>
+						</gmd:LI_ProcessStep>
+					</gmd:processStep>
+				</gmd:LI_Lineage>
+			</gmd:lineage>
+		</gmd:DQ_DataQuality>
+	</gmd:dataQualityInfo>
+	<gmd:identificationInfo>
+		<gmd:MD_DataIdentification>
+			<gmd:citation>
+				<gmd:CI_Citation>
+					<gmd:title>
+						<gco:CharacterString>goce_xx_sphere</gco:CharacterString>
+					</gmd:title>
+					<gmd:collectiveTitle>
+						<gco:CharacterString>c:\development\github\ianmacleod\research\goce\goce.gpf</gco:CharacterString>
+					</gmd:collectiveTitle>
+					<gmd:date>
+						<gmd:CI_Date>
+							<gmd:date>
+								<gco:Date>2018-4-29</gco:Date>
+							</gmd:date>
+						</gmd:CI_Date>
+					</gmd:date>
+				</gmd:CI_Citation>
+			</gmd:citation>
+			<gmd:resourceFormat>
+				<gmd:MD_Format>
+					<gmd:name>
+						<gco:CharacterString>Geosoft Grid</gco:CharacterString>
+					</gmd:name>
+				</gmd:MD_Format>
+			</gmd:resourceFormat>
+			<gmd:pointOfContact>
+				<gmd:CI_ResponsibleParty>
+					<gmd:individualName>
+						<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+					</gmd:individualName>
+				</gmd:CI_ResponsibleParty>
+			</gmd:pointOfContact>
+			<gmd:extent>
+				<gmd:EX_Extent>
+					<gmd:geographicElement>
+						<gmd:EX_GeographicBoundingBox>
+							<gmd:westBoundLongitude>
+								<gco:Decimal>-180</gco:Decimal>
+							</gmd:westBoundLongitude>
+							<gmd:eastBoundLongitude>
+								<gco:Decimal>180</gco:Decimal>
+							</gmd:eastBoundLongitude>
+							<gmd:southBoundLatitude>
+								<gco:Decimal>-84.039789037213495</gco:Decimal>
+							</gmd:southBoundLatitude>
+							<gmd:northBoundLatitude>
+								<gco:Decimal>83.245001639888869</gco:Decimal>
+							</gmd:northBoundLatitude>
+						</gmd:EX_GeographicBoundingBox>
+					</gmd:geographicElement>
+				</gmd:EX_Extent>
+			</gmd:extent>
+		</gmd:MD_DataIdentification>
+	</gmd:identificationInfo>
+	<gmd:contact>
+		<gmd:CI_ResponsibleParty>
+			<gmd:individualName>
+				<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+			</gmd:individualName>
+		</gmd:CI_ResponsibleParty>
+	</gmd:contact>
+	<gmd:dateStamp>
+		<gco:Date>2018-4-29</gco:Date>
+	</gmd:dateStamp>
+	<gmd:referenceSystemInfo>
+		<gmd:MD_ReferenceSystem>
+			<gmd:referenceSystemIdentifier>
+				<gmd:RS_Identifier>
+					<gmd:codeSpace>
+						<gco:CharacterString>ESRI</gco:CharacterString>
+					</gmd:codeSpace>
+					<gmd:code>
+						<gco:CharacterString>GEOGCS["GCS_Sphere",DATUM["D_Sphere",SPHEROID["Sphere",6371000.0,0.0]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433],AUTHORITY["EPSG",4035]]</gco:CharacterString>
+					</gmd:code>
+					<gmd:version>
+						<gco:CharacterString>1</gco:CharacterString>
+					</gmd:version>
+				</gmd:RS_Identifier>
+			</gmd:referenceSystemIdentifier>
+		</gmd:MD_ReferenceSystem>
+	</gmd:referenceSystemInfo>
+</gmd:MD_Metadata>

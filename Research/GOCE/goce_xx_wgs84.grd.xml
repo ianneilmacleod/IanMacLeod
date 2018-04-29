@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xsi:schemaLocation="http://www.isotc211.org/2005/gmd ../schemas/iso19139fra/gmd/gmd.xsd" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:map="urn:brgm:mapping" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gco="http://www.isotc211.org/2005/gco">
+	<geosoft xmlns="http://www.geosoft.com/schema/geo">
+		<dataset version="1">
+			<title>goce_xx_wgs84</title>
+			<file_format>Geosoft Grid</file_format>
+			<project_name>c:\development\github\ianmacleod\research\goce\goce.gpf</project_name>
+			<data_created_by>Ian MacLeod</data_created_by>
+			<data_creation_date>2018-04-29</data_creation_date>
+			<metadata_created_by>Ian MacLeod</metadata_created_by>
+			<metadata_creation_date>2018-04-29</metadata_creation_date>
+			<lineage>
+				<process name="gridwind.gx" displaystring="GRIDWIND" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="16:01:26">
+					<parameter name="GRIDWIND::CLIP" value="DUMMIED" type="string"/>
+					<parameter name="GRIDWIND::COORD" value="GRID" type="string"/>
+					<parameter name="GRIDWIND::CSIZE" value="" type="string"/>
+					<parameter name="GRIDWIND::DEC" value="" type="string"/>
+					<parameter name="GRIDWIND::GRD" value=".\xx_.grd(GRD)" type="string"/>
+					<parameter name="GRIDWIND::NEW" value=".\goce_xx_wgs84.grd(GRD)" type="string"/>
+					<parameter name="GRIDWIND::XMAX" value="912" type="double"/>
+					<parameter name="GRIDWIND::XMIN" value="12" type="double"/>
+					<parameter name="GRIDWIND::YMAX" value="" type="string"/>
+					<parameter name="GRIDWIND::YMIN" value="" type="string"/>
+					<parameter name="GRIDWIND::ZMAX" value="" type="string"/>
+					<parameter name="GRIDWIND::ZMIN" value="" type="string"/>
+					<source name="c:\development\github\ianmacleod\Research\GOCE\xx_.grd" type="GRID">
+						<lineage>
+							<process name="gridrepj.gx" displaystring="Reproject grids" user="Ian MacLeod" version="Version 9.4 (20180418.55)" date="2018-04-29" time="15:58:29">
+								<parameter name="GRIDREPJ::NEWCELL" value="0.4" type="double"/>
+								<parameter name="GRIDREPJ::NEWGRID" value=".\xx_.grd(GRD)" type="string"/>
+								<parameter name="GRIDREPJ::NEWIPJ_XML" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;WGS 84&quot; ellipsoid=&quot;WGS 84&quot; datum=&quot;WGS 84&quot; wellknown_epsg=&quot;4326&quot; datumtrf=&quot;WGS 84&quot; datumtrf_description=&quot;[WGS 84] World&quot; radius=&quot;6378137&quot; eccentricity=&quot;0.0818191908426215&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;shift x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;/&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+								<parameter name="GRIDREPJ::OLDGRID" value=".\goce_xx_sphere.grd(GRD)" type="string"/>
+								<parameter name="GRIDREPJ::OLDIPJ_XML" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;*Sphere&quot; ellipsoid=&quot;Sphere&quot; datum=&quot;*Sphere&quot; radius=&quot;6371000&quot; eccentricity=&quot;0&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+								<parameter name="IPJSET::PROJECTION" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#xA;&lt;projection type=&quot;GEOGRAPHIC&quot; name=&quot;WGS 84&quot; ellipsoid=&quot;WGS 84&quot; datum=&quot;WGS 84&quot; wellknown_epsg=&quot;4326&quot; datumtrf=&quot;WGS 84&quot; datumtrf_description=&quot;[WGS 84] World&quot; radius=&quot;6378137&quot; eccentricity=&quot;0.0818191908426215&quot; xmlns=&quot;http://www.geosoft.com/schema/geo&quot;&gt;&#xA;	&lt;shift x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;/&gt;&#xA;	&lt;units name=&quot;dega&quot; unit_scale=&quot;1&quot;/&gt;&#xA;&lt;/projection&gt;&#xA;" type="string"/>
+								<source name="c:\development\github\ianmacleod\Research\GOCE\goce_xx_sphere.grd" type="GRID"/>
+							</process>
+						</lineage>
+					</source>
+				</process>
+			</lineage>
+			<georeference>
+				<dataextents>
+					<extent2d minx="-180" miny="-86" maxx="180" maxy="85.200000000000017"/>
+				</dataextents>
+				<projection type="GEOGRAPHIC" name="WGS 84" ellipsoid="WGS 84" datum="WGS 84" wellknown_epsg="4326" datumtrf="WGS 84" datumtrf_description="[WGS 84] World" radius="6378137" eccentricity="0.0818191908426215">
+					<shift x="0" y="0" z="0"/>
+					<units name="dega" unit_scale="1"/>
+				</projection>
+			</georeference>
+		</dataset>
+	</geosoft>
+	<gmd:dataQualityInfo>
+		<gmd:DQ_DataQuality>
+			<gmd:lineage>
+				<gmd:LI_Lineage>
+					<gmd:processStep xlink:type="Geosoft Process" xlink:title="gridwind.gx">
+						<gmd:LI_ProcessStep>
+							<gmd:dateTime>
+								<gco:DateTime>2018-04-29T16:01:26</gco:DateTime>
+							</gmd:dateTime>
+							<gmd:processor>
+								<gmd:CI_ResponsibleParty>
+									<gmd:individualName>
+										<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+									</gmd:individualName>
+								</gmd:CI_ResponsibleParty>
+							</gmd:processor>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::CLIP" xlink:title="DUMMIED">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::COORD" xlink:title="GRID">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::CSIZE" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::DEC" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::GRD" xlink:title=".\xx_.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::NEW" xlink:title=".\goce_xx_wgs84.grd(GRD)">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::XMAX" xlink:title="912">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::XMIN" xlink:title="12">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::YMAX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::YMIN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::ZMAX" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Parameter" xlink:role="GRIDWIND::ZMIN" xlink:title="">
+								<gmd:LI_Source/>
+							</gmd:source>
+							<gmd:source xlink:type="Data Source" xlink:role="GRID" xlink:title="c:\development\github\ianmacleod\Research\GOCE\xx_.grd">
+								<gmd:LI_Source/>
+							</gmd:source>
+						</gmd:LI_ProcessStep>
+					</gmd:processStep>
+				</gmd:LI_Lineage>
+			</gmd:lineage>
+		</gmd:DQ_DataQuality>
+	</gmd:dataQualityInfo>
+	<gmd:identificationInfo>
+		<gmd:MD_DataIdentification>
+			<gmd:citation>
+				<gmd:CI_Citation>
+					<gmd:title>
+						<gco:CharacterString>goce_xx_wgs84</gco:CharacterString>
+					</gmd:title>
+					<gmd:collectiveTitle>
+						<gco:CharacterString>c:\development\github\ianmacleod\research\goce\goce.gpf</gco:CharacterString>
+					</gmd:collectiveTitle>
+					<gmd:date>
+						<gmd:CI_Date>
+							<gmd:date>
+								<gco:Date>2018-4-29</gco:Date>
+							</gmd:date>
+						</gmd:CI_Date>
+					</gmd:date>
+				</gmd:CI_Citation>
+			</gmd:citation>
+			<gmd:resourceFormat>
+				<gmd:MD_Format>
+					<gmd:name>
+						<gco:CharacterString>Geosoft Grid</gco:CharacterString>
+					</gmd:name>
+				</gmd:MD_Format>
+			</gmd:resourceFormat>
+			<gmd:pointOfContact>
+				<gmd:CI_ResponsibleParty>
+					<gmd:individualName>
+						<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+					</gmd:individualName>
+				</gmd:CI_ResponsibleParty>
+			</gmd:pointOfContact>
+			<gmd:extent>
+				<gmd:EX_Extent>
+					<gmd:geographicElement>
+						<gmd:EX_GeographicBoundingBox>
+							<gmd:westBoundLongitude>
+								<gco:Decimal>-180</gco:Decimal>
+							</gmd:westBoundLongitude>
+							<gmd:eastBoundLongitude>
+								<gco:Decimal>180</gco:Decimal>
+							</gmd:eastBoundLongitude>
+							<gmd:southBoundLatitude>
+								<gco:Decimal>-86</gco:Decimal>
+							</gmd:southBoundLatitude>
+							<gmd:northBoundLatitude>
+								<gco:Decimal>85.200000000000017</gco:Decimal>
+							</gmd:northBoundLatitude>
+						</gmd:EX_GeographicBoundingBox>
+					</gmd:geographicElement>
+				</gmd:EX_Extent>
+			</gmd:extent>
+		</gmd:MD_DataIdentification>
+	</gmd:identificationInfo>
+	<gmd:contact>
+		<gmd:CI_ResponsibleParty>
+			<gmd:individualName>
+				<gco:CharacterString>Ian MacLeod</gco:CharacterString>
+			</gmd:individualName>
+		</gmd:CI_ResponsibleParty>
+	</gmd:contact>
+	<gmd:dateStamp>
+		<gco:Date>2018-4-29</gco:Date>
+	</gmd:dateStamp>
+	<gmd:referenceSystemInfo>
+		<gmd:MD_ReferenceSystem>
+			<gmd:referenceSystemIdentifier>
+				<gmd:RS_Identifier>
+					<gmd:codeSpace>
+						<gco:CharacterString>ESRI</gco:CharacterString>
+					</gmd:codeSpace>
+					<gmd:code>
+						<gco:CharacterString>GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433],AUTHORITY["EPSG",4326]]</gco:CharacterString>
+					</gmd:code>
+					<gmd:version>
+						<gco:CharacterString>1</gco:CharacterString>
+					</gmd:version>
+				</gmd:RS_Identifier>
+			</gmd:referenceSystemIdentifier>
+		</gmd:MD_ReferenceSystem>
+	</gmd:referenceSystemInfo>
+</gmd:MD_Metadata>
